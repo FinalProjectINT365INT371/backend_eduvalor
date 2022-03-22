@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "93P/Mk7tiVysYwPxlSWrDm/ihdDxzaE+/RJbIISu3XnYoZI7KmuUP5DzQ1GA9abjKBEe9WWMJZ/iEdkIGPo6fw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp\\EduvalorWebApp\\EduvalorWebApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Earty\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\Earty\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\Earty\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "C:\\Users\\Earty\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "C:\\Users\\Earty\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "C:\\Users\\Earty\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+  ],
+  "logs": []
+}
