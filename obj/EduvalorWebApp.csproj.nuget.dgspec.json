@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp\\EduvalorWebApp\\EduvalorWebApp.csproj": {}
+    "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp\\EduvalorWebApp\\EduvalorWebApp.csproj": {
+    "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp\\EduvalorWebApp\\EduvalorWebApp.csproj",
+        "projectUniqueName": "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp.csproj",
         "projectName": "EduvalorWebApp",
-        "projectPath": "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp\\EduvalorWebApp\\EduvalorWebApp.csproj",
+        "projectPath": "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp.csproj",
         "packagesPath": "C:\\Users\\Earty\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp\\EduvalorWebApp\\obj\\",
+        "outputPath": "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Earty\\AppData\\Roaming\\NuGet\\NuGet.Config",

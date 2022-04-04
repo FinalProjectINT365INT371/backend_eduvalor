@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "93P/Mk7tiVysYwPxlSWrDm/ihdDxzaE+/RJbIISu3XnYoZI7KmuUP5DzQ1GA9abjKBEe9WWMJZ/iEdkIGPo6fw==",
+  "dgSpecHash": "dNEbjEXUGRDs2jLA9yzhiH6vqkH9AKSAfOVMxhvFecn6qjPs9yHem2xpqbPcPvkGSFY0RPXWPs6UQ4+Mj13J2w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp\\EduvalorWebApp\\EduvalorWebApp.csproj",
+  "projectFilePath": "C:\\Users\\Earty\\Desktop\\backend_eduvalor\\EduvalorWebApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Earty\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\Earty\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
