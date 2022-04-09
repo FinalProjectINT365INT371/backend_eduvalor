@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  deployment:
+  development:
     docker:
       - image: 'cimg/node:17.9.0'
     steps:
