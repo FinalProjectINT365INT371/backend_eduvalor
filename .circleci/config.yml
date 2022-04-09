@@ -6,10 +6,15 @@ jobs:
       - image: 'cimg/node:17.9.0'
     steps:
       - checkout
-      - run: node --version
+      - add_ssh_keys:
+	  fingerprints:
+	    - "e6:66:8c:66:aa:1d:f6:5b:24:a1:8f:88:6d:be:17:ff"
       - run:
-          name: test
-          command: echo "Hello NestJS from dev"
+          name: deploy
+          command: ssh -o StrictHostKeyChecking=no $VM_USERNAME@$VM_PUB_IP
+		   "cd backend_eduvalor
+		   ls -la
+		   git branch -a"
 
 workflows:
   version: 2
