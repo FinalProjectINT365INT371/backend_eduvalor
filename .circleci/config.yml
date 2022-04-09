@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build:
+  deployment:
     docker:
       - image: 'cimg/node:17.9.0'
     steps:
@@ -9,4 +9,13 @@ jobs:
       - run: node --version
       - run:
           name: test
-          command: echo "Hello NestJS"
+          command: echo "Hello NestJS from dev"
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - development:
+          filters:
+            branches:
+              only: develop
