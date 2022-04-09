@@ -1,0 +1,12 @@
+version: 2.1
+
+jobs:
+  development:
+    docker:
+      - image: 'cimg/node:17.9.0'
+    steps:
+      - checkout
+      - run: node --version
+      - run:
+          name: test
+          command: echo "Hello NestJS"
