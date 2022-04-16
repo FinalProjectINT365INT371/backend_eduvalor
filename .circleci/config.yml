@@ -11,8 +11,7 @@ jobs:
             - "e6:66:8c:66:aa:1d:f6:5b:24:a1:8f:88:6d:be:17:ff"
       - run:
           name: deploy
-          command: ssh -o StrictHostKeyChecking=no $VM_USERNAME@$VM_PUB_IP \
-                   $VM_PASS
+          command: ssh -i /home/eduvalor371/.ssh/id_rsa $VM_USERNAME@$VM_PUB_IP
                    "cd backend_eduvalor
                    ls -la
                    git branch -a"
