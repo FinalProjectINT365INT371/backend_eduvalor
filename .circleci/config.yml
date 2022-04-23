@@ -11,7 +11,8 @@ jobs:
           command: ls -la ; 
       - run:
           name: Docker check
-          command: sudo apt-get update -y
+          command: sudo apt-get update -y ;
+                   docker ps -a ;
       - add_ssh_keys:
           fingerprints:
             - "86:d5:09:4a:54:79:25:43:4f:94:59:42:fe:82:2b:04"
