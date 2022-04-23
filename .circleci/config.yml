@@ -11,10 +11,10 @@ jobs:
           command: echo "Hello World"
       - add_ssh_keys:
           fingerprints:
-            - "5d:79:44:30:7c:67:3e:be:f7:b3:be:dd:ef:bc:f3:b1"
+            - "86:d5:09:4a:54:79:25:43:4f:94:59:42:fe:82:2b:04"
       - run:
           name: deploy
-          command: ssh -o StrictHostKeyChecking=no $VM_USERNAME@$VM_PUB_IP
+          command: sudo sh -o StrictHostKeyChecking=no $VM_USERNAME@$VM_PUB_IP "ls -la ;"
 
 workflows:
   version: 2
