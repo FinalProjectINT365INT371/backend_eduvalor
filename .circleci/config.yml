@@ -8,13 +8,13 @@ jobs:
       - checkout
       - run:
           name: check directory
-          command: ls -la ;
+          command: ls -la ; 
       - add_ssh_keys:
           fingerprints:
             - "86:d5:09:4a:54:79:25:43:4f:94:59:42:fe:82:2b:04"
       - run:
           name: deploy
-          command: ssh -o StrictHostKeyChecking=no $VM_USERNAME@$VM_PUB_IP 
+          command: ssh $VM_USERNAME@$VM_PUB_IP 
                    "cd backend_eduvalor ; ls -la ; "
 
 workflows:
