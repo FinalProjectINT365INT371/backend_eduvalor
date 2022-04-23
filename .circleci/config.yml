@@ -7,8 +7,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: test
-          command: echo "Hello World"
+          name: check directory
+          command: ls -la ;
       - add_ssh_keys:
           fingerprints:
             - "86:d5:09:4a:54:79:25:43:4f:94:59:42:fe:82:2b:04"
