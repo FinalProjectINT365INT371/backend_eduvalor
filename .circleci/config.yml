@@ -15,9 +15,9 @@ jobs:
       - run:
           name: deploy
           command: ssh -o StrictHostKeyChecking=no $VM_USERNAME@$VM_PUB_IP
-                   "cd backend_eduvalor
-                   ls -la
-                   git branch -a"
+                   "cd backend_eduvalor ;
+                   ls -la ;
+                   git branch -a ;"
 
 workflows:
   version: 2
