@@ -17,8 +17,8 @@ jobs:
             - "86:d5:09:4a:54:79:25:43:4f:94:59:42:fe:82:2b:04"
       - run:
           name: deploy
-          command: ssh -o StrictHostKeyChecking=no -l $VM_USERNAME@$VM_PUB_IP 
-                   "cd backend_eduvalor ; ls -la ; "
+          command: ssh -o StrictHostKeyChecking=no $VM_USERNAME@$VM_PUB_IP 
+                   "ls -la"
 
 workflows:
   version: 2
