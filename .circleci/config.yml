@@ -18,7 +18,16 @@ jobs:
       - run:
           name: deploy
           command: ssh -o StrictHostKeyChecking=no $VM_USERNAME@$VM_PUB_IP 
-                   "ls -la"
+                   "cd backend_eduvalor ;
+                   ls -l ;
+                   git checkout develop ;
+                   git branch ;
+                   git pull origin develop ;
+                   rm -rf .env ;
+                   touch .env ;
+                   echo 'DATABASE_URL=$DATABASE_URL' >> .env ;
+                   chmod +x ./deploy_dev.sh ;
+                   ./depoy_dev.sh"
 
 workflows:
   version: 2
