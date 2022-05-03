@@ -27,7 +27,7 @@ jobs:
                    touch .env ;
                    echo 'DATABASE_URL=$DATABASE_URL' >> .env ;
                    chmod +x ./deploy_dev.sh ;
-                   ./depoy_dev.sh"
+                   ./deploy_dev.sh"
 
 workflows:
   version: 2
