@@ -6,15 +6,19 @@ jobs:
       - image: 'cimg/node:17.9.0'
     steps:
       - checkout
+      - run:
+          name: check directory
+          command: ls -la ; 
+      - run:
+          name: check software update
+          command: sudo apt-get update -y ;
       - add_ssh_keys:
           fingerprints:
-            - "e6:66:8c:66:aa:1d:f6:5b:24:a1:8f:88:6d:be:17:ff"
+            - "d9:40:2f:a7:21:4a:32:eb:25:52:77:f5:31:b9:66:05"
       - run:
           name: deploy
-          command: ssh -o StrictHostKeyChecking=no $VM_USERNAME@$VM_PUB_IP
-                   "cd backend_eduvalor
-                   ls -la
-                   git branch -a"
+          command: ssh -o StrictHostKeyChecking=no $VM_USERNAME@$VM_PUB_IP 
+                   "ls -la"
 
 workflows:
   version: 2
