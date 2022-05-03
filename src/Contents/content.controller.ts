@@ -2,8 +2,8 @@ import { Body, Controller, Get, NotAcceptableException, Param, Post } from '@nes
 import {  CreateContent } from './ContentData/dto/contentData.dto';
 import { ContentService } from './content.service';
 
-@Controller("userRole")
-export class UserRoleController {
+@Controller("content")
+export class ContentController {
   constructor(private readonly contentService: ContentService) {}
 
   @Get()
@@ -16,7 +16,7 @@ export class UserRoleController {
     return this.contentService.findById(id);
   }
 
-  @Post('adduser')
+  @Post('addcontent')
   async create(@Body()  createContent: CreateContent) {
     try {
 
