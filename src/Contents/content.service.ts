@@ -17,7 +17,7 @@ export class ContentService {
     private readonly ContentModel: Model<ContentData>,
   ) { }
   getHello(): string {
-    return 'Hello World!';
+    return 'Hello Dev World!';
   }
 
   async create(createContent: CreateContent): Promise<ContentData> {
