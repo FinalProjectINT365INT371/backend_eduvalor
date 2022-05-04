@@ -2,16 +2,16 @@ import { IsNotEmpty, IsNumber, IsNumberString, IsString,IsArray, IsBoolean } fro
 
 export class CreateContent {
 
-    @IsNumber()
-    readonly Id: string;
 
     @IsString()
     readonly Header:string;
 
     @IsString()
+    @IsArray()
     readonly TextData:string;
 
     @IsString()
+    @IsArray()
     readonly ContentCategory:string;
 
     @IsString()
