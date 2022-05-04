@@ -42,8 +42,9 @@ export class ContentService {
     if (content == null) {
       throw new NotFoundException();
     }
-    content.UpdateDate = new Date().toLocaleString();
     await content.updateOne(createContent).exec();
+    content.UpdateDate = new Date().toLocaleString();
+    await content.save();
     return await this.ContentModel.find({ _id: id }).exec();
   }
 
