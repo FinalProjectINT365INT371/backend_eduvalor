@@ -34,27 +34,27 @@ export class ContentService {
   }
 
   async findById(id) {
-    return await this.ContentModel.find({ _id: new mongoose.Types.ObjectId(id) }).exec();
+    return await this.ContentModel.find({ _id: id }).exec();
   }
 
   async updateContent(id, createContent: CreateContent) {
-    const content = await this.ContentModel.findOne({ _id: new mongoose.Types.ObjectId(id) }).exec();
+    const content = await this.ContentModel.findOne({ _id: id }).exec();
     if (content == null) {
       throw new NotFoundException();
     }
     content.UpdateDate = new Date().toLocaleString();
     await content.updateOne(createContent).exec();
-    return await this.ContentModel.find({ _id: new mongoose.Types.ObjectId(id) }).exec();
+    return await this.ContentModel.find({ _id: id }).exec();
   }
 
   async removeById(id) {
-    const content = await this.ContentModel.findOne({ _id: new mongoose.Types.ObjectId(id) }).exec();
+    const content = await this.ContentModel.findOne({ _id: id }).exec();
     if (content == null) {
       throw new NotFoundException();
     }
     content.DeleteFlag = true;
     await content.save();
-    return await this.ContentModel.find({ _id: new mongoose.Types.ObjectId(id) }).exec();
+    return await this.ContentModel.find({ _id:id }).exec();
   }
 
   async generateNewId() {

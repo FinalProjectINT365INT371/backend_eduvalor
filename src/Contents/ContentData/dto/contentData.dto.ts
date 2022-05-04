@@ -15,13 +15,11 @@ export class CreateContent {
     readonly ContentCategory:string;
 
     @IsString()
+    @IsArray()
+    readonly ImageUrl:[String];
+
+    @IsString()
     readonly CreateBy: string;
-
-    @IsString()
-    readonly CreateDate: string;
-
-    @IsString()
-    readonly UpdateDate: string;
 
     @IsBoolean()
     readonly DeleteFlag: boolean;

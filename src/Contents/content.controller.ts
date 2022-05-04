@@ -28,7 +28,7 @@ export class ContentController {
     }
   }
   @Put('editcontent')
-  async edit(@Query() id:string,@Body()  createContent: CreateContent) {
+  async edit(@Query('id') id:string,@Body()  createContent: CreateContent) {
     try {
       return await this.contentService.updateContent(id,createContent);
 
@@ -38,7 +38,7 @@ export class ContentController {
   }
 
   @Delete('deletecontent')
-  async delete(@Query() id:string) {
+  async delete(@Query('id') id:string) {
     try {
       return await this.contentService.removeById(id);
 
