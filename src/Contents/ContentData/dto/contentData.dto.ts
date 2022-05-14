@@ -17,6 +17,9 @@ export class CreateContent {
     @IsString()
     @IsArray()
     readonly ImageUrl:[String];
+    
+    @IsArray()
+    readonly ImageFile: [File]
 
     @IsString()
     readonly CreateBy: string;

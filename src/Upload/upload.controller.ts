@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Delete, Get, Post, Query, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UploadService } from './upload.service';
 import { MinioService } from 'nestjs-minio-client';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -24,12 +24,17 @@ export class UploadController {
       filepath: file.path
     };
     console.log(filedata); 
-    return this.uploadService.uploadImage(file,'test');
+    return this.uploadService.uploadImage(file,'test',filedata.originalname);
   }
 
   @Get('Upload/GetImage')
   getImage(@Query('imageName') imageName:string) {
     return this.uploadService.getImage(imageName,'test');
+  }
+
+  @Delete('Upload/removeImage')
+  removeImage(@Query('imageName') imageName:string) {
+    return this.uploadService.removeImage(imageName,'test');
   }
 
 }

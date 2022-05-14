@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, NotAcceptableException, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotAcceptableException, Param, Post, Put, Query,  UploadedFile,UseInterceptors } from '@nestjs/common';
 import { CreateContent } from './ContentData/dto/contentData.dto';
 import { ContentService } from './content.service';
 import { query } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller("content")
 export class ContentController {
@@ -18,10 +19,14 @@ export class ContentController {
   }
 
   @Post('addcontent')
-  async create(@Body()  createContent: CreateContent) {
+  @UseInterceptors(FileInterceptor('ImageFiles'))
+  async create(@UploadedFile() file : Array<Express.Multer.File>,@Body() createContent: CreateContent) {
+    console.log(file);
+    console.log(createContent);
+    
     try {
 
-      return await this.contentService.create(createContent);
+      return await this.contentService.create(createContent,file);
 
     } catch (error) {
       return `Have error : ${error}`;
