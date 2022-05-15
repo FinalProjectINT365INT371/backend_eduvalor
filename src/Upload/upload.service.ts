@@ -16,22 +16,20 @@ export class UploadService {
   }
 
   async uploadImage(@UploadedFile() file, Buckets: string, imageName: string) {
-    let folder = Math.floor(Math.random() * 5000);
-    let fileName = folder + '/' + imageName + ".png";
     this.minioClient.client.putObject(
       Buckets,
-      fileName,
+      imageName,
       file.buffer,
       function (err) {
-        if (err) return `${'Unable to upload : ' + fileName}`;
-        console.log(`${'Uploaded : ' + fileName}`);
+        if (err) return `${'Unable to upload : ' + imageName}`;
+        console.log(`${'Uploaded : ' + imageName}`);
       },
     );
-    return `${'Uploaded : ' + fileName}`;
+    return `${'Uploaded : ' + imageName}`;
   }
 
   async getImage(imageName: string, Buckets: string) {
-    let imageUrl = '';
+    let imageMinio = '';
     this.minioClient.client.presignedUrl(
       'GET',
       Buckets,
@@ -39,10 +37,12 @@ export class UploadService {
       24 * 60 * 60,
       function (err, presignedUrl) {
         if (err) return `${'Unable to get : ' + imageName}`;
-        imageUrl = presignedUrl;
-        console.log(`${'imageUrl : ' + imageUrl}`);
+        imageMinio = presignedUrl;
+        console.log(`${'imageUrl : ' + imageMinio}`);
       },
     );
+   
+    let imageUrl  = await imageMinio;
     return `${'imageUrl : ' + imageUrl}`;
     //if not found FE use url and check HttpStatus
   }

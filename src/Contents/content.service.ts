@@ -3,6 +3,7 @@ import {
   NotAcceptableException,
   NotFoundException,
   UploadedFile,
+  UploadedFiles,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ContentDataSchema } from './ContentData/contentData.schema';
@@ -32,19 +33,26 @@ export class ContentService {
     return await this.ContentModel.find({ _id: id }).exec();
   }
 
-  async create(createContent: CreateContent,@UploadedFile() file ): Promise<ContentData> {
+  async findImageId(id) {
+    return await this.uploadService.getImage(id, 'content');
+  }
+
+  async create(
+    createContent: CreateContent,
+    @UploadedFiles() file: Array<Express.Multer.File>,
+  ): Promise<ContentData> {
     const createdContent = new this.ContentModel(createContent);
     const genId = await this.generateNewId();
     createdContent._id = genId;
     createdContent.CreateDate = new Date().toLocaleString();
     createdContent.UpdateDate = new Date().toLocaleString();
-    if (file != null) {
-      // createContent.ImageFile.forEach((image, index) => {
-      //   let imageName = genId + '_' + index++;
-      //   this.uploadService.uploadImage(image, 'Content', imageName);
-      // });
-      let imageName = genId + '_' + 1;
-      this.uploadService.uploadImage(file, 'content', imageName);
+    if (file.length > 0) {
+      file.forEach((image, index) => {
+        let imageName = genId + '_' + index++;
+        let fileName = genId + '/' + imageName + '.png';
+        this.uploadService.uploadImage(image, 'content', fileName);
+        createdContent.ImageUrl.push(genId +'/' + imageName + '.png');
+      });
     }
     return await createdContent.save();
   }
@@ -78,4 +86,27 @@ export class ContentService {
     let genId = 'CT_' + (lastId + 1);
     return genId;
   }
+
+  // async getImageInContent(id) {
+  //   const content = await this.ContentModel.findOne({ _id: id }).exec();
+  //   let imagesMinioUrl = null;
+  //   if (content == null) {
+  //     throw new NotFoundException();
+  //   }
+  //   let imageList = content.ImageUrl;
+  //   if (imageList.length > 0) {
+  //     imageList.forEach(async (image) => {
+  //       let imageUrl = null;
+  //       image = `${id}/${image}.png`;
+  //       console.log(image);
+  //       imageUrl = await this.uploadService.getImage(
+  //         image.toString(),
+  //         'content',
+  //       );
+  //       console.log(imageUrl);
+  //       imagesMinioUrl.push(imageUrl.toString().split(':')[1]);
+  //     });
+  //   }
+  //   return imagesMinioUrl;
+  // }
 }
