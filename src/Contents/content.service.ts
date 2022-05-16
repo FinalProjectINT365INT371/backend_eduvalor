@@ -34,7 +34,7 @@ export class ContentService {
   }
 
   async findImageId(id) {
-    return await this.uploadService.getImage(id, 'content');
+    return await this.uploadService.getSignedUrl(id, 'content');
   }
 
   async create(
@@ -87,26 +87,16 @@ export class ContentService {
     return genId;
   }
 
-  // async getImageInContent(id) {
-  //   const content = await this.ContentModel.findOne({ _id: id }).exec();
-  //   let imagesMinioUrl = null;
-  //   if (content == null) {
-  //     throw new NotFoundException();
-  //   }
-  //   let imageList = content.ImageUrl;
-  //   if (imageList.length > 0) {
-  //     imageList.forEach(async (image) => {
-  //       let imageUrl = null;
-  //       image = `${id}/${image}.png`;
-  //       console.log(image);
-  //       imageUrl = await this.uploadService.getImage(
-  //         image.toString(),
-  //         'content',
-  //       );
-  //       console.log(imageUrl);
-  //       imagesMinioUrl.push(imageUrl.toString().split(':')[1]);
-  //     });
-  //   }
-  //   return imagesMinioUrl;
-  // }
+   async getImageInContent(id) {
+     const content = await this.ContentModel.findOne({ _id: id }).exec();
+     var imagesMinioUrl = [];
+     if (content == null) {
+       throw new NotFoundException("This content doesn't have any image");
+     }
+    let imageList = content.ImageUrl;
+     if (imageList.length > 0) {
+      imagesMinioUrl = await this.uploadService.getImageListInContent(imageList);
+     }
+     return imagesMinioUrl;
+   }
 }

@@ -29,13 +29,8 @@ export class UploadController {
 
   @Get('Upload/GetImage')
   getImage(@Query('imageName') imageName:string) {
-    return this.uploadService.getImage(imageName,'test');
+    return this.uploadService.getSignedUrl(imageName,'test');
   }
-
-  // @Get('Upload/GetFolderImages')
-  // getFolderImage(@Query('FolderName') FolderName:string) {
-  //   return this.uploadService.getImage(FolderName,'content');
-  // }
 
   @Delete('Upload/removeImage')
   removeImage(@Query('imageName') imageName:string) {
