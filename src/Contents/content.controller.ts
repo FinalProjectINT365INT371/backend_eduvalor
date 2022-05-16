@@ -55,9 +55,14 @@ export class ContentController {
     }
   }
   @Put('editcontent')
-  async edit(@Query('id') id: string, @Body() createContent: CreateContent) {
+  @UseInterceptors(FilesInterceptor('ImageFiles'))
+  async edit(
+    @Query('id') id: string,
+    @Body() createContent: CreateContent,
+    @UploadedFiles() file: Array<Express.Multer.File>,
+  ) {
     try {
-      return await this.contentService.updateContent(id, createContent);
+      return await this.contentService.updateContent(id, createContent,file);
     } catch (error) {
       return `Have error : ${error}`;
     }

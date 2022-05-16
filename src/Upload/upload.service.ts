@@ -2,6 +2,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
   UploadedFile,
 } from '@nestjs/common';
 import { MinioService } from 'nestjs-minio-client';
@@ -52,14 +53,27 @@ export class UploadService {
     });
   }
 
-  async getImageListInContent(items : [String]) {
+  async getImageListInContent(items: [String]) {
     let imagesUrl = [];
     for (let item of items) {
-      let signedUrl = await this.getSignedUrl(item.toString(),'content');
-      signedUrl = signedUrl.toString().replace("imageUrl",item.toString());
+      let signedUrl = await this.getSignedUrl(item.toString(), 'content');
+      signedUrl = signedUrl.toString().replace('imageUrl', item.toString());
       imagesUrl.push(signedUrl);
     }
     return imagesUrl;
+  }
+  async getImageList(folder: string, Buckets: string) {
+    var data = [];
+    return new Promise((resolve) => {
+      var stream = this.minioClient.client.listObjects(Buckets,folder, true);
+      stream.on('data', function (obj) {
+        data.push(obj);
+      });
+      stream.on('end', function (obj) {
+        console.log(data);
+        resolve(data);
+      });
+    });
   }
 
 }

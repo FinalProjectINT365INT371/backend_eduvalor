@@ -5,11 +5,11 @@ import { MinioModule } from 'nestjs-minio-client';
 import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [ ConfigModule.forRoot({ isGlobal: true,}),MinioModule.register({
-    endPoint: 'localhost',
-    port: 9000,
+    endPoint: process.env.ENDPOINT,
+    port: parseInt(process.env.MINIO_PORT),
     useSSL: false,
     accessKey: process.env.MINIO_ACCESS_KEY,
-    secretKey: process.env.MINIO_SECETE_KEY
+    secretKey: process.env.MINIO_SECRET_KEY
   })],   
   controllers: [UploadController],
   providers: [ UploadService],

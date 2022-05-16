@@ -51,16 +51,63 @@ export class ContentService {
         let imageName = genId + '_' + index++;
         let fileName = genId + '/' + imageName + '.png';
         this.uploadService.uploadImage(image, 'content', fileName);
-        createdContent.ImageUrl.push(genId +'/' + imageName + '.png');
+        createdContent.ImageUrl.push(genId + '/' + imageName + '.png');
       });
     }
     return await createdContent.save();
   }
 
-  async updateContent(id, createContent: CreateContent) {
+  async updateContent(
+    id,
+    createContent: CreateContent,
+    @UploadedFiles() file: Array<Express.Multer.File>,
+  ) {
     const content = await this.ContentModel.findOne({ _id: id }).exec();
     if (content == null) {
       throw new NotFoundException();
+    }
+    content.ImageUrl.splice(0, content.ImageUrl.length);
+    await this.uploadService.removeImage(content._id.toString(), 'content');
+
+    if (file.length > 0) {
+      file.forEach((image, index) => {
+        let imageName = content._id + '_' + index++;
+        let fileName = content._id + '/' + imageName + '.png';
+        this.uploadService.uploadImage(image, 'content', fileName);
+        content.ImageUrl.push(content._id + '/' + imageName + '.png');
+      });
+
+      // console.log(content.ImageUrl);
+      // let imagesOfContent = Promise.resolve(
+      //   await this.uploadService.getImageList(
+      //     content._id.toString(),
+      //     'content',
+      //   ),
+      // );  
+      // let imagesOfContents = imagesOfContent[0];
+      // console.log(imagesOfContents);
+      
+      // const removeNotuseImages = (ImageUrl, imagesOfContents) => {
+      //   const spreaded = [...ImageUrl, ...imagesOfContents];
+      //   return spreaded.filter((el) => {
+      //     return !(ImageUrl.includes(el) && imagesOfContents.includes(el));
+      //   });
+      // };
+
+      // console.log(removeNotuseImages(content.ImageUrl, imagesOfContent));
+      // let ImagestoRemove = removeNotuseImages(
+      //   content.ImageUrl,
+      //   imagesOfContent,
+      // );
+      // if (ImagestoRemove.length > 0) {
+      //   ImagestoRemove.forEach((item) => {
+      //     var index = content.ImageUrl.indexOf(item);
+      //     if (index !== -1) {
+      //       content.ImageUrl.splice(index, 1);
+      //     }
+      //     this.uploadService.removeImage(item, 'content');
+      //   });
+      // }
     }
     await content.updateOne(createContent).exec();
     content.UpdateDate = new Date().toLocaleString();
@@ -87,16 +134,18 @@ export class ContentService {
     return genId;
   }
 
-   async getImageInContent(id) {
-     const content = await this.ContentModel.findOne({ _id: id }).exec();
-     var imagesMinioUrl = [];
-     if (content == null) {
-       throw new NotFoundException("This content doesn't have any image");
-     }
+  async getImageInContent(id) {
+    const content = await this.ContentModel.findOne({ _id: id }).exec();
+    var imagesMinioUrl = [];
+    if (content == null) {
+      throw new NotFoundException("This content doesn't have any image");
+    }
     let imageList = content.ImageUrl;
-     if (imageList.length > 0) {
-      imagesMinioUrl = await this.uploadService.getImageListInContent(imageList);
-     }
-     return imagesMinioUrl;
-   }
+    if (imageList.length > 0) {
+      imagesMinioUrl = await this.uploadService.getImageListInContent(
+        imageList,
+      );
+    }
+    return imagesMinioUrl;
+  }
 }
