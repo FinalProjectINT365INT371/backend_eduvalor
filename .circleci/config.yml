@@ -26,6 +26,10 @@ jobs:
                    rm -rf .env ;
                    touch .env ;
                    echo 'DATABASE_URL=$DATABASE_URL' >> .env ;
+                   echo 'ENDPOINT=$ENDPOINT' >> .env ;
+                   echo 'MINIO_PORT=$MINIO_PORT' >> .env ;
+                   echo 'MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY' >> .env ;
+                   echo 'MINIO_SECRET_KEY=$MINIO_SECRET_KEY' >> .env ; 
                    chmod +x ./deploy_dev.sh ;
                    ./deploy_dev.sh"
 
