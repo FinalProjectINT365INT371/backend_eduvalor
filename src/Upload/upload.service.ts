@@ -16,10 +16,15 @@ export class UploadService {
   }
 
   async uploadImage(@UploadedFile() file, Buckets: string, imageName: string) {
+    const metadata = {
+      'Content-type': file.mimetype,
+    };
     this.minioClient.client.putObject(
       Buckets,
       imageName,
       file.buffer,
+      file.size,
+      metadata,
       function (err) {
         if (err) return `${'Unable to upload : ' + imageName}`;
         console.log(`${'Uploaded : ' + imageName}`);
@@ -65,7 +70,7 @@ export class UploadService {
   async getImageList(folder: string, Buckets: string) {
     var data = [];
     return new Promise((resolve) => {
-      var stream = this.minioClient.client.listObjects(Buckets,folder, true);
+      var stream = this.minioClient.client.listObjects(Buckets, folder, true);
       stream.on('data', function (obj) {
         data.push(obj);
       });
@@ -75,5 +80,4 @@ export class UploadService {
       });
     });
   }
-
 }
