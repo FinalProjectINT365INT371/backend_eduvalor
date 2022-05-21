@@ -48,11 +48,7 @@ export class ContentController {
   ) {
     console.log(file);
     console.log(createContent);
-    try {
-      return await this.contentService.create(createContent, file);
-    } catch (error) {
-      return `Have error : ${error}`;
-    }
+    return await this.contentService.create(createContent, file);
   }
   @Put('editcontent')
   @UseInterceptors(FilesInterceptor('ImageFiles'))
@@ -61,19 +57,11 @@ export class ContentController {
     @Body() createContent: CreateContent,
     @UploadedFiles() file: Array<Express.Multer.File>,
   ) {
-    try {
-      return await this.contentService.updateContent(id, createContent,file);
-    } catch (error) {
-      return `Have error : ${error}`;
-    }
+    return await this.contentService.updateContent(id, createContent, file);
   }
 
   @Delete('deletecontent')
   async delete(@Query('id') id: string) {
-    try {
-      return await this.contentService.removeById(id);
-    } catch (error) {
-      return `Have error : ${error}`;
-    }
+    return await this.contentService.removeById(id);
   }
 }

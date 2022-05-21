@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotAcceptableException,
   NotFoundException,
@@ -30,7 +31,12 @@ export class ContentService {
   }
 
   async findById(id) {
-    return await this.ContentModel.find({ _id: id }).exec();
+    let content = await this.ContentModel.find({ _id: id }).exec();
+    if (content.length > 0) {
+      console.log(content);
+      return content;
+    }
+    throw new NotFoundException("This content doesn't exist");
   }
 
   async findImageId(id) {
@@ -43,6 +49,9 @@ export class ContentService {
   ): Promise<ContentData> {
     const createdContent = new this.ContentModel(createContent);
     const genId = await this.generateNewId();
+    if (createdContent.TextData.length <= 0) {
+      throw new BadRequestException('This content must have some data');
+    }
     createdContent._id = genId;
     createdContent.CreateDate = new Date().toLocaleString();
     createdContent.UpdateDate = new Date().toLocaleString();
@@ -64,7 +73,7 @@ export class ContentService {
   ) {
     const content = await this.ContentModel.findOne({ _id: id }).exec();
     if (content == null) {
-      throw new NotFoundException();
+      throw new NotFoundException("This content doesn't exist");
     }
     content.ImageUrl.splice(0, content.ImageUrl.length);
     await this.uploadService.removeImage(content._id.toString(), 'content');
@@ -83,10 +92,10 @@ export class ContentService {
       //     content._id.toString(),
       //     'content',
       //   ),
-      // );  
+      // );
       // let imagesOfContents = imagesOfContent[0];
       // console.log(imagesOfContents);
-      
+
       // const removeNotuseImages = (ImageUrl, imagesOfContents) => {
       //   const spreaded = [...ImageUrl, ...imagesOfContents];
       //   return spreaded.filter((el) => {
@@ -118,7 +127,7 @@ export class ContentService {
   async removeById(id) {
     const content = await this.ContentModel.findOne({ _id: id }).exec();
     if (content == null) {
-      throw new NotFoundException();
+      throw new NotFoundException("This content doesn't exist");
     }
     content.DeleteFlag = true;
     await content.save();
@@ -138,7 +147,7 @@ export class ContentService {
     const content = await this.ContentModel.findOne({ _id: id }).exec();
     var imagesMinioUrl = [];
     if (content == null) {
-      throw new NotFoundException("This content doesn't have any image");
+      throw new NotFoundException("This content does't exist");
     }
     let imageList = content.ImageUrl;
     if (imageList.length > 0) {
