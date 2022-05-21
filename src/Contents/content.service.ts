@@ -147,7 +147,7 @@ export class ContentService {
     const content = await this.ContentModel.findOne({ _id: id }).exec();
     var imagesMinioUrl = [];
     if (content == null) {
-      throw new NotFoundException("This content does't exist");
+      throw new NotFoundException("This content doesn't exist");
     }
     let imageList = content.ImageUrl;
     if (imageList.length > 0) {
