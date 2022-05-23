@@ -14,7 +14,7 @@ jobs:
           command: sudo apt-get update -y ;
       - add_ssh_keys:
           fingerprints:
-            - "d9:40:2f:a7:21:4a:32:eb:25:52:77:f5:31:b9:66:05"
+            - ${SSH_FINGERPRINT}
       - run:
           name: deploy
           command: ssh -o StrictHostKeyChecking=no $VM_USERNAME@$VM_PUB_IP 
