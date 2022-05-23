@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Next,
   NotAcceptableException,
   NotFoundException,
   UploadedFile,
@@ -63,6 +64,8 @@ export class ContentService {
         createdContent.ImageUrl.push(genId + '/' + imageName + '.png');
       });
     }
+    let textData = createdContent.TextData[0];
+    createdContent.TextData[0] = this.replceImageName(textData,createdContent.ImageUrl);
     return await createdContent.save();
   }
 
@@ -85,7 +88,8 @@ export class ContentService {
         this.uploadService.uploadImage(image, 'content', fileName);
         content.ImageUrl.push(content._id + '/' + imageName + '.png');
       });
-
+      let textData = content.TextData[0];
+      content.TextData[0] = this.replceImageName(textData,content.ImageUrl);
       // console.log(content.ImageUrl);
       // let imagesOfContent = Promise.resolve(
       //   await this.uploadService.getImageList(
@@ -118,6 +122,7 @@ export class ContentService {
       //   });
       // }
     }
+    
     await content.updateOne(createContent).exec();
     content.UpdateDate = new Date().toLocaleString();
     await content.save();
@@ -156,5 +161,19 @@ export class ContentService {
       );
     }
     return imagesMinioUrl;
+  }
+
+  replceImageName(text: String, imageList: [String]) {
+    let convertText = '';
+    let newtext = text.split(`<img src="">`);
+    newtext.forEach((text, index, newtext) => {
+      if (index !== newtext.length - 1) {
+        convertText = convertText + text + `<img src="${imageList[index]}">`;
+      } else {
+        convertText = convertText + text;
+      }
+    });
+    console.log(convertText);
+    return convertText;
   }
 }
