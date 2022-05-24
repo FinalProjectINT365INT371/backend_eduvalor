@@ -32,8 +32,11 @@ export class ContentService {
   }
 
   async findById(id) {
-    let content = await this.ContentModel.find({ _id: id }).exec();
-    if (content.length > 0) {
+    let content = await this.ContentModel.findOne({ _id: id }).exec();
+    if (content != null) {
+      let textdata = content.TextData[0];
+      let imageList =  await this.getImageInContent(id);
+      content.TextData[0] = this.replceImageUrl(textdata , imageList); 
       console.log(content);
       return content;
     }
@@ -74,7 +77,7 @@ export class ContentService {
     createContent: CreateContent,
     @UploadedFiles() file: Array<Express.Multer.File>,
   ) {
-    const content = await this.ContentModel.findOne({ _id: id }).exec();
+    let content = await this.ContentModel.findOne({ _id: id }).exec();
     if (content == null) {
       throw new NotFoundException("This content doesn't exist");
     }
@@ -174,6 +177,17 @@ export class ContentService {
       }
     });
     console.log(convertText);
+    return convertText;
+  }
+
+  replceImageUrl(text: String, imageUrlList: any[]) {
+    let convertText = text;
+    imageUrlList.forEach((imageUrl) =>{
+      let imageName = imageUrl.split(" : ")[0];
+      let imageurl= imageUrl.split(" : ")[1];
+      convertText = convertText.replace(imageName, imageurl);
+      
+    });
     return convertText;
   }
 }
