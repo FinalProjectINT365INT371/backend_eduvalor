@@ -26,17 +26,37 @@ export class ContentService {
   getHello(): string {
     return 'Hello Dev World!';
   }
-
+  async findAllcontentId() {
+    let contents = await this.ContentModel.find({}, { _id: 1})
+      .sort({ UpdateDate: 'desc' })
+      .exec();
+      return contents;
+  }
   async findAll() {
-    return await this.ContentModel.find({}).sort({ score: 'desc' }).exec();
+    let contents = await this.ContentModel.find({})
+      .sort({ UpdateDate: 'desc' })
+      .exec();
+    if (contents.length == 0 || contents == null) {
+      throw new NotFoundException("This content doesn't exist");
+    }
+    let contentList = [];
+     for (const content of contents) {
+      let textdata = content.TextData[0];
+          let imageList = await this.getImageInContent(content.id);
+          content.TextData[0] = await this.replceImageUrl(textdata, imageList);
+          console.log(content);
+          contentList.push(content);
+     }
+    console.log(contentList);
+    return contentList;
   }
 
   async findById(id) {
     let content = await this.ContentModel.findOne({ _id: id }).exec();
     if (content != null) {
       let textdata = content.TextData[0];
-      let imageList =  await this.getImageInContent(id);
-      content.TextData[0] = this.replceImageUrl(textdata , imageList); 
+      let imageList = await this.getImageInContent(id);
+      content.TextData[0] = await this.replceImageUrl(textdata, imageList);
       console.log(content);
       return content;
     }
@@ -68,7 +88,10 @@ export class ContentService {
       });
     }
     let textData = createdContent.TextData[0];
-    createdContent.TextData[0] = this.replceImageName(textData,createdContent.ImageUrl);
+    createdContent.TextData[0] = this.replceImageName(
+      textData,
+      createdContent.ImageUrl,
+    );
     return await createdContent.save();
   }
 
@@ -92,7 +115,7 @@ export class ContentService {
         content.ImageUrl.push(content._id + '/' + imageName + '.png');
       });
       let textData = content.TextData[0];
-      content.TextData[0] = this.replceImageName(textData,content.ImageUrl);
+      content.TextData[0] = this.replceImageName(textData, content.ImageUrl);
       // console.log(content.ImageUrl);
       // let imagesOfContent = Promise.resolve(
       //   await this.uploadService.getImageList(
@@ -125,7 +148,7 @@ export class ContentService {
       //   });
       // }
     }
-    
+
     await content.updateOne(createContent).exec();
     content.UpdateDate = new Date().toLocaleString();
     await content.save();
@@ -180,13 +203,12 @@ export class ContentService {
     return convertText;
   }
 
-  replceImageUrl(text: String, imageUrlList: any[]) {
+  async replceImageUrl(text: String, imageUrlList: any[]) {
     let convertText = text;
-    imageUrlList.forEach((imageUrl) =>{
-      let imageName = imageUrl.split(" : ")[0];
-      let imageurl= imageUrl.split(" : ")[1];
+    imageUrlList.forEach((imageUrl) => {
+      let imageName = imageUrl.split(' : ')[0];
+      let imageurl = imageUrl.split(' : ')[1];
       convertText = convertText.replace(imageName, imageurl);
-      
     });
     return convertText;
   }
