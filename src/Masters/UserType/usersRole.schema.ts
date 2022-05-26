@@ -2,16 +2,16 @@ import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
 
 export interface UserRole extends Document {
-  readonly RoleId: number;
-  readonly RoleName: string;
-  readonly CreateBy: string;
-  readonly CreateDate: string;
-  readonly UpdateDate: string;
-  readonly DeleteFlag: boolean;
+  _id: Object;
+  RoleName: string;
+  CreateBy: string;
+  CreateDate: string;
+  UpdateDate: string;
+  DeleteFlag: boolean;
 }
 
 export const UserRoleSchema = new mongoose.Schema({
-  RoleId: Number,
+  _id: Object,
   RoleName: String,
   CreateBy: String,
   CreateDate: String,

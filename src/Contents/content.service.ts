@@ -27,32 +27,40 @@ export class ContentService {
     return 'Hello Dev World!';
   }
   async findAllcontentId() {
-    let contents = await this.ContentModel.find({}, { _id: 1})
+    let contents = await this.ContentModel.find(
+      {
+        DeleteFlag: false,
+      },
+      { _id: 1 },
+    )
       .sort({ UpdateDate: 'desc' })
       .exec();
-      return contents;
+    return contents;
   }
   async findAll() {
-    let contents = await this.ContentModel.find({})
+    let contents = await this.ContentModel.find({ DeleteFlag: false })
       .sort({ UpdateDate: 'desc' })
       .exec();
     if (contents.length == 0 || contents == null) {
       throw new NotFoundException("This content doesn't exist");
     }
     let contentList = [];
-     for (const content of contents) {
+    for (const content of contents) {
       let textdata = content.TextData[0];
-          let imageList = await this.getImageInContent(content.id);
-          content.TextData[0] = await this.replceImageUrl(textdata, imageList);
-          console.log(content);
-          contentList.push(content);
-     }
+      let imageList = await this.getImageInContent(content.id);
+      content.TextData[0] = await this.replceImageUrl(textdata, imageList);
+      console.log(content);
+      contentList.push(content);
+    }
     console.log(contentList);
     return contentList;
   }
 
   async findById(id) {
-    let content = await this.ContentModel.findOne({ _id: id }).exec();
+    let content = await this.ContentModel.findOne({
+      _id: id,
+      DeleteFlag: false,
+    }).exec();
     if (content != null) {
       let textdata = content.TextData[0];
       let imageList = await this.getImageInContent(id);
@@ -100,9 +108,15 @@ export class ContentService {
     createContent: CreateContent,
     @UploadedFiles() file: Array<Express.Multer.File>,
   ) {
-    let content = await this.ContentModel.findOne({ _id: id }).exec();
+    let content = await this.ContentModel.findOne({
+      _id: id,
+      DeleteFlag: false,
+    }).exec();
     if (content == null) {
       throw new NotFoundException("This content doesn't exist");
+    }
+    if (createContent.TextData.length <= 0) {
+      throw new BadRequestException('This content must have some data');
     }
     content.ImageUrl.splice(0, content.ImageUrl.length);
     await this.uploadService.removeImage(content._id.toString(), 'content');
@@ -156,11 +170,17 @@ export class ContentService {
   }
 
   async removeById(id) {
-    const content = await this.ContentModel.findOne({ _id: id }).exec();
+    const content = await this.ContentModel.findOne({
+      _id: id,
+      DeleteFlag: false,
+    }).exec();
     if (content == null) {
-      throw new NotFoundException("This content doesn't exist");
+      throw new NotFoundException(
+        "This content doesn't exist or aleady removed",
+      );
     }
     content.DeleteFlag = true;
+    content.UpdateDate = new Date().toLocaleString();
     await content.save();
     return await this.ContentModel.find({ _id: id }).exec();
   }

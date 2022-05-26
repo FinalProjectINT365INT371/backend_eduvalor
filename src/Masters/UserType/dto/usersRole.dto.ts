@@ -2,8 +2,8 @@ import { IsNotEmpty, IsNumber, IsNumberString, IsString,IsArray, IsBoolean } fro
 
 export class CreateUserRole {
 
-    @IsNumber()
-    readonly RoleId: number;
+    @IsString()
+    readonly RoleId: string;
 
     @IsString()
     readonly RoleName:string;

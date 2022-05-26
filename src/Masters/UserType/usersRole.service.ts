@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserRole } from './usersRole.schema';
 import { Model } from 'mongoose';
@@ -14,30 +18,64 @@ export class UserRoleService {
   }
 
   async create(createUserRole: CreateUserRole): Promise<UserRole> {
-    const createdVideo = new this.UserRoleModel(createUserRole);
-    return await createdVideo.save();
+    let userRole =  await this.UserRoleModel.findOne({ _id: createUserRole.RoleId }).exec();
+    if (userRole != null) {
+      throw new BadRequestException("This role id already exist");
+    }
+    const createdUserRole = new this.UserRoleModel(createUserRole);
+    createdUserRole._id = createUserRole.RoleId;
+    createdUserRole.CreateDate = new Date().toLocaleString();
+    createdUserRole.UpdateDate = new Date().toLocaleString();
+    if (createdUserRole._id == null || createdUserRole.RoleName == null) {
+      throw new BadRequestException('This role must have some data');
+    }
+    await createdUserRole.save();
+    return createdUserRole;
   }
 
   async findAll() {
-    return await this.UserRoleModel.find({}).sort({ score: 'desc' }).exec();
+    let userRole = await this.UserRoleModel.find({ DeleteFlag: false })
+      .sort({ _id: 'desc' })
+      .exec();
+    if (userRole.length == 0) {
+      throw new NotFoundException("Roles doesn't exist");
+    }
+    return userRole;
   }
 
   async findById(id) {
-    return await this.UserRoleModel.find({ _id: id }).exec();
+    let userRole =  await this.UserRoleModel.findOne({ _id: id, DeleteFlag: false }).exec();
+    if (userRole == null) {
+      throw new NotFoundException("This role doesn't exist");
+    }
+    return userRole;
   }
 
-  // async updateView(id) {
-  //   const UserRoleList = await this.UserRoleModel.find({ _id: id }).exec();
-  //   await this.UserRoleModel
-  //     .update(
-  //       { _id: id },
-  //       { view: videoList[0].view + 1, score: videoList[0].score + 1 },
-  //       { upsert: true },
-  //     )
-  //     .exec();
-  // }
+  async update(id, updateUserRole: CreateUserRole): Promise<UserRole> {
+    let userRole = await this.UserRoleModel.findOne({
+      _id: id,
+      DeleteFlag: false,
+    }).exec();
+    if (userRole == null) {
+      throw new NotFoundException("This role doesn't exist");
+    }
+    userRole.UpdateDate = new Date().toLocaleString();
+    await userRole.updateOne(updateUserRole).exec();
+    await userRole.save();
+    return await this.UserRoleModel.findOne({ _id: id }).exec();
+  }
 
   async removeById(id) {
-    return await this.UserRoleModel.remove({ _id: id }).exec();
+    let userRole = await this.UserRoleModel.findOne({
+      _id: id,
+      DeleteFlag: false,
+    }).exec();
+    if (userRole == null) {
+      throw new NotFoundException("This role doesn't exist or aleady removed");
+    }
+    userRole.DeleteFlag = true;
+    userRole.UpdateDate = new Date().toLocaleString();
+    await userRole.save();
+    return await this.UserRoleModel.findOne({ _id: id }).exec();
   }
 }
