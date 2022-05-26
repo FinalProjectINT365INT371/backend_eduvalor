@@ -135,7 +135,9 @@ export class ContentService {
         content.ImageUrl.push(content._id + '/' + imageName + '.png');
       });
       let textData = createContent.TextData[0];
+      console.log(createContent.TextData[0]);
       content.TextData[0] = this.replceImageName(textData, content.ImageUrl);
+      //console.log(content.TextData[0]);
       // console.log(content.ImageUrl);
       // let imagesOfContent = Promise.resolve(
       //   await this.uploadService.getImageList(
