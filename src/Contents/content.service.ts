@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   Next,
   NotAcceptableException,
@@ -23,9 +24,6 @@ export class ContentService {
     private readonly uploadService: UploadService,
   ) {}
 
-  getHello(): string {
-    return 'Hello Dev World!';
-  }
   async findAllcontentId() {
     let contents = await this.ContentModel.find(
       {
@@ -35,6 +33,9 @@ export class ContentService {
     )
       .sort({ UpdateDate: 'desc' })
       .exec();
+    if (contents.length == 0 || contents == null) {
+      throw new NotFoundException("This content doesn't exist");
+    }
     return contents;
   }
   async findAll() {
@@ -100,7 +101,12 @@ export class ContentService {
       textData,
       createdContent.ImageUrl,
     );
-    return await createdContent.save();
+    try {
+      await createdContent.save();
+    } catch (error) {
+      throw new HttpException("Can't save new content", 503);
+    }
+    return createdContent;
   }
 
   async updateContent(
@@ -128,7 +134,7 @@ export class ContentService {
         this.uploadService.uploadImage(image, 'content', fileName);
         content.ImageUrl.push(content._id + '/' + imageName + '.png');
       });
-      let textData = content.TextData[0];
+      let textData = createContent.TextData[0];
       content.TextData[0] = this.replceImageName(textData, content.ImageUrl);
       // console.log(content.ImageUrl);
       // let imagesOfContent = Promise.resolve(
@@ -165,7 +171,11 @@ export class ContentService {
 
     await content.updateOne(createContent).exec();
     content.UpdateDate = new Date().toLocaleString();
-    await content.save();
+    try {
+      await content.save();
+    } catch (error) {
+      throw new HttpException("Can't update content", 503);
+    }
     return await this.ContentModel.find({ _id: id }).exec();
   }
 
@@ -181,7 +191,11 @@ export class ContentService {
     }
     content.DeleteFlag = true;
     content.UpdateDate = new Date().toLocaleString();
-    await content.save();
+    try {
+      await content.save();
+    } catch (error) {
+      throw new HttpException("Can't remove content", 503);
+    }
     return await this.ContentModel.find({ _id: id }).exec();
   }
 
@@ -212,13 +226,15 @@ export class ContentService {
   replceImageName(text: String, imageList: [String]) {
     let convertText = '';
     let newtext = text.split(`<img src="">`);
-    newtext.forEach((text, index, newtext) => {
-      if (index !== newtext.length - 1) {
-        convertText = convertText + text + `<img src="${imageList[index]}">`;
-      } else {
-        convertText = convertText + text;
-      }
-    });
+    if (newtext != null) {
+      newtext.forEach((text, index, newtext) => {
+        if (index !== newtext.length - 1) {
+          convertText = convertText + text + `<img src="${imageList[index]}">`;
+        } else {
+          convertText = convertText + text;
+        }
+      });
+    }
     console.log(convertText);
     return convertText;
   }
