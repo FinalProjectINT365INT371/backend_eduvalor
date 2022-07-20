@@ -5,8 +5,8 @@ import {
   NotFoundException,
   UploadedFile,
 } from '@nestjs/common';
+import { Budgets, S3 } from 'aws-sdk';
 import { MinioService } from 'nestjs-minio-client';
-
 @Injectable()
 export class UploadService {
   constructor(private readonly minioClient: MinioService) {}
@@ -80,4 +80,49 @@ export class UploadService {
       });
     });
   }
+
+  // S3 Service
+  async uploadPublicFile(@UploadedFile() file, Buckets: string, imageName: string) {
+    const s3 = new S3();
+    const uploadResult = await s3.upload({
+      Bucket: Buckets,
+      Body: file.buffer,
+      Key: imageName,
+      ContentType: file.mimetype,
+    })
+      .promise(); 
+    console.log(`${'Uploaded : ' + imageName}`);
+    return `${'Uploaded : ' + uploadResult.Key}`;
+  }
+
+  async removeImageS3(imageName: string, Buckets: string) {
+    const s3 = new S3();
+    await s3.deleteObject({Bucket:Buckets , Key:imageName}).promise();
+    console.log(`Removed : ${imageName}`); 
+    return `Removed : ${imageName}`;
+    //if not found FE use url and check HttpStatus
+  }
+
+  async getSignedUrlS3(imageName: string, Buckets: string) {   
+    const s3 = new S3();
+    const param = {'Bucket': Buckets, 'Key': imageName};
+    console.log(param);
+    const url = s3.getSignedUrl('getObject', param);
+    console.log(`${'imageUrl : ' + url}`);
+    return `${'imageUrl : ' + url}`;
+  }
+
+  async getImageListS3(folder: string, Buckets: string) {
+    const s3 = new S3();
+    var list = []
+    let param = { 'Bucket':  Buckets, 'Prefix': `${folder}`,};
+    await s3.listObjects(param, function(err, data) {
+      if (err) console.log(err, err.stack); 
+      else { 
+      console.log(data);  
+      list = data.Contents;
+      }}).promise();  
+    return list ;
+  }
 }
+
