@@ -82,7 +82,7 @@ export class UploadService {
   }
 
   // S3 Service
-  async uploadPublicFile(@UploadedFile() file, Buckets: string, imageName: string) {
+  async uploadFile(@UploadedFile() file, Buckets: string, imageName: string) {
     const s3 = new S3();
     const uploadResult = await s3.upload({
       Bucket: Buckets,
@@ -123,6 +123,17 @@ export class UploadService {
       list = data.Contents;
       }}).promise();  
     return list ;
+  
+  }
+
+  async getImageListS3InContent(items: [String]) {
+    let imagesUrl = [];
+    for (let item of items) {
+      let signedUrl = await this.getSignedUrlS3(item.toString(), 'eduvalor-contents');
+      signedUrl = signedUrl.toString().replace('imageUrl', item.toString());
+      imagesUrl.push(signedUrl);
+    }
+    return imagesUrl;
   }
 }
 

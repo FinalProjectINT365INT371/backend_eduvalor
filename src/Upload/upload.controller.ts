@@ -69,17 +69,17 @@ export class UploadController {
       filepath: file.path,
     };
     console.log(filedata);
-    return this.uploadService. uploadPublicFile(file, 'eduvalor', filedata.originalname);
+    return this.uploadService. uploadFile(file, 'eduvalorucket', filedata.originalname);
   }
 
   @Delete('Upload/removeImageS3')
   removeImageS3(@Query('imageName') imageName: string) {
-    return this.uploadService.removeImageS3(imageName, 'eduvalor');
+    return this.uploadService.removeImageS3(imageName, 'eduvalorucket');
   }
 
   @Get('Upload/GetImageS3')
   getImageS3(@Query('imageName') imageName: string) {
-    return this.uploadService.getSignedUrlS3(imageName,'eduvalor');
+    return this.uploadService.getSignedUrlS3(imageName,'eduvalorucket');
   }
 
   @Get('Upload/GetlistImagesS3')

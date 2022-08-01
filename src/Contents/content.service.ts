@@ -73,7 +73,7 @@ export class ContentService {
   }
 
   async findImageId(id) {
-    return await this.uploadService.getSignedUrl(id, 'content');
+    return await this.uploadService.getSignedUrlS3(id, 'eduvalor-contents');
   }
 
   async create(
@@ -92,7 +92,7 @@ export class ContentService {
       file.forEach((image, index) => {
         let imageName = genId + '_' + index++;
         let fileName = genId + '/' + imageName + '.png';
-        this.uploadService.uploadImage(image, 'content', fileName);
+        this.uploadService.uploadFile(image, 'eduvalor-contents', fileName);
         createdContent.ImageUrl.push(genId + '/' + imageName + '.png');
       });
     }
@@ -125,13 +125,13 @@ export class ContentService {
       throw new BadRequestException('This content must have some data');
     }
     content.ImageUrl.splice(0, content.ImageUrl.length);
-    await this.uploadService.removeImage(content._id.toString(), 'content');
+    await this.uploadService.removeImageS3(content._id.toString(), 'eduvalor-contents');
 
     if (file.length > 0) {
       file.forEach((image, index) => {
         let imageName = content._id + '_' + index++;
         let fileName = content._id + '/' + imageName + '.png';
-        this.uploadService.uploadImage(image, 'content', fileName);
+        this.uploadService.uploadFile(image, 'eduvalor-contents', fileName);
         content.ImageUrl.push(content._id + '/' + imageName + '.png');
       });
       let textData = createContent.TextData[0];
@@ -218,7 +218,7 @@ export class ContentService {
     }
     let imageList = content.ImageUrl;
     if (imageList.length > 0) {
-      imagesMinioUrl = await this.uploadService.getImageListInContent(
+      imagesMinioUrl = await this.uploadService.getImageListS3InContent(
         imageList,
       );
     }
