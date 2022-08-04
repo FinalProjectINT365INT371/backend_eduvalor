@@ -19,6 +19,7 @@ config.update({
   imports: [ConfigModule.forRoot({ isGlobal: true,})
             ,MongooseModule.forRoot(process.env.DATABASE_URL)
             ,UserRoleModule,ContentModule,UploadModule,
+            
             WinstonModule.forRoot({
               format: winston.format.combine(
                 winston.format.timestamp({
@@ -40,7 +41,7 @@ config.update({
                   level: 'debug',
                   dirname:'./log/',
                   filename: 'debug.log-%DATE%.log',
-                  datePattern: 'YYYY-MM-DD-HH',
+                  datePattern: 'YYYY-MM-DD',
                 }),
                 // new winston.transports.File({
                 //   dirname: './log/info/',
