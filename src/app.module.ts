@@ -19,7 +19,7 @@ config.update({
   imports: [ConfigModule.forRoot({ isGlobal: true,})
             ,MongooseModule.forRoot(process.env.DATABASE_URL)
             ,UserRoleModule,ContentModule,UploadModule,
-            
+
             WinstonModule.forRoot({
               format: winston.format.combine(
                 winston.format.timestamp({
@@ -29,7 +29,7 @@ config.update({
               ),
               transports: [
                 new winston.transports.Console({
-                  level: 'info',
+                  level: 'silly',
                   format: winston.format.combine(
                     winston.format.colorize(),
                     winston.format.printf(
@@ -38,9 +38,9 @@ config.update({
                   )
                 }),
                 new winston.transports.DailyRotateFile({
-                  level: 'debug',
+                  level: 'silly',
                   dirname:'./log/',
-                  filename: 'debug.log-%DATE%.log',
+                  filename: 'App-%DATE%.log',
                   datePattern: 'YYYY-MM-DD',
                 }),
                 // new winston.transports.File({
