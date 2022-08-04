@@ -29,7 +29,10 @@ jobs:
                    echo 'ENDPOINT=$ENDPOINT' >> .env ;
                    echo 'MINIO_PORT=$MINIO_PORT' >> .env ;
                    echo 'MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY' >> .env ;
-                   echo 'MINIO_SECRET_KEY=$MINIO_SECRET_KEY' >> .env ; 
+                   echo 'MINIO_SECRET_KEY=$MINIO_SECRET_KEY' >> .env ;
+                   echo 'AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID' >> .env ;
+                   echo 'AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY' >> .env ;
+                   echo 'AWS_REGION=$AWS_REGION' >> ,env ; 
                    chmod +x ./deploy_dev.sh ;
                    ./deploy_dev.sh"
 
