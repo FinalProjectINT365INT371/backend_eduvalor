@@ -1,29 +1,27 @@
 import {
   BadRequestException,
   HttpException,
+  Inject,
   Injectable,
-  Next,
-  NotAcceptableException,
   NotFoundException,
-  UploadedFile,
   UploadedFiles,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ContentDataSchema } from './ContentData/contentData.schema';
 import { Model } from 'mongoose';
 import { CreateContent } from './ContentData/dto/contentData.dto';
 import { ContentData } from './ContentData/contentData.schema';
-import mongoose from 'mongoose';
-import { timeStamp } from 'console';
 import { UploadService } from 'src/Upload/upload.service';
+import { Logger } from 'winston';
 @Injectable()
 export class ContentService {
   constructor(
     @InjectModel('contentData')
     private readonly ContentModel: Model<ContentData>,
     private readonly uploadService: UploadService,
+    @Inject('winston')
+    private readonly logger: Logger,
   ) {}
-
+  EOF = "End of Function";
   async findAllcontentId() {
     let contents = await this.ContentModel.find(
       {
@@ -39,25 +37,30 @@ export class ContentService {
     return contents;
   }
   async findAll() {
+    this.logger.debug("Function : Find All Content");
     let contents = await this.ContentModel.find({ DeleteFlag: false })
       .sort({ UpdateDate: 'desc' })
       .exec();
     if (contents.length == 0 || contents == null) {
-      throw new NotFoundException("This content doesn't exist");
+      let res = "This content doesn't exist";
+      this.logger.error(res)
+     //this.logger.debug(this.EOF)
+      throw new NotFoundException(res);
     }
     let contentList = [];
     for (const content of contents) {
       let textdata = content.TextData[0];
       let imageList = await this.getImageInContent(content.id);
       content.TextData[0] = await this.replceImageUrl(textdata, imageList);
-      console.log(content);
       contentList.push(content);
     }
-    console.log(contentList);
+    this.logger.info(contentList)
+   //this.logger.debug(this.EOF);
     return contentList;
   }
 
   async findById(id) {
+    this.logger.debug(`Function : Find Content - ${id}`);
     let content = await this.ContentModel.findOne({
       _id: id,
       DeleteFlag: false,
@@ -66,13 +69,19 @@ export class ContentService {
       let textdata = content.TextData[0];
       let imageList = await this.getImageInContent(id);
       content.TextData[0] = await this.replceImageUrl(textdata, imageList);
-      console.log(content);
+      this.logger.info(content);
+     //this.logger.debug(this.EOF);
       return content;
+    } else {
+      let res = "This content doesn't exist";
+      this.logger.error(res);
+     //this.logger.debug(this.EOF);
+      throw new NotFoundException(res);
     }
-    throw new NotFoundException("This content doesn't exist");
   }
 
   async findImageId(id) {
+    this.logger.debug(`Function : Find Image - ${id}`);
     return await this.uploadService.getSignedUrlS3(id, 'eduvalor-contents');
   }
 
@@ -82,8 +91,12 @@ export class ContentService {
   ): Promise<ContentData> {
     const createdContent = new this.ContentModel(createContent);
     const genId = await this.generateNewId();
+    this.logger.debug(`Function : Create Content - ${genId}`);
     if (createdContent.TextData.length <= 0) {
-      throw new BadRequestException('This content must have some data');
+      let res = 'This content must have some data'
+      this.logger.error(res);
+     //this.logger.debug(this.EOF);
+      throw new BadRequestException(res);
     }
     createdContent._id = genId;
     createdContent.CreateDate = new Date().toLocaleString();
@@ -104,8 +117,13 @@ export class ContentService {
     try {
       await createdContent.save();
     } catch (error) {
-      throw new HttpException("Can't save new content", 503);
+      let res = "Can't save new content"
+      this.logger.error(res);
+     //this.logger.debug(this.EOF);
+      throw new HttpException(res, 503);
     }
+    this.logger.info(createdContent);
+    //this.logger.debug(this.EOF);
     return createdContent;
   }
 
@@ -118,11 +136,18 @@ export class ContentService {
       _id: id,
       DeleteFlag: false,
     }).exec();
+    this.logger.debug(`Function : Update Content - ${id}`);
     if (content == null) {
-      throw new NotFoundException("This content doesn't exist");
+      let res = "This content doesn't exist";
+      this.logger.error(res);
+     //this.logger.debug(this.EOF);
+      throw new NotFoundException(res);
     }
     if (createContent.TextData.length <= 0) {
-      throw new BadRequestException('This content must have some data');
+      let res = 'This content must have some data';
+      this.logger.error(res);
+     //this.logger.debug(this.EOF);
+      throw new BadRequestException(res);
     }
     content.ImageUrl.splice(0, content.ImageUrl.length);
     await this.uploadService.removeImageS3(content._id.toString(), 'eduvalor-contents');
@@ -135,7 +160,7 @@ export class ContentService {
         content.ImageUrl.push(content._id + '/' + imageName + '.png');
       });
       let textData = createContent.TextData[0];
-      console.log(createContent.TextData[0]);
+      //console.log(createContent.TextData[0]);
       content.TextData[0] = this.replceImageName(textData, content.ImageUrl);
       //console.log(content.TextData[0]);
       // console.log(content.ImageUrl);
@@ -176,19 +201,29 @@ export class ContentService {
     try {
       await content.save();
     } catch (error) {
-      throw new HttpException("Can't update content", 503);
+      let res = "Can't update content";
+      this.logger.error(res);
+     //this.logger.debug(this.EOF);
+      throw new HttpException(res, 503);
     }
-    return await this.ContentModel.find({ _id: id }).exec();
+   //this.logger.debug(this.EOF);
+    let updatedContent = await this.ContentModel.find({ _id: id }).exec();
+    this.logger.info(updatedContent);
+    return updatedContent
   }
 
   async removeById(id) {
+    this.logger.debug(`Function : Remove Content - ${id}`);
     const content = await this.ContentModel.findOne({
       _id: id,
       DeleteFlag: false,
     }).exec();
     if (content == null) {
+      let res = "This content doesn't exist or aleady removed";
+      this.logger.error(res);
+     //this.logger.debug(this.EOF);
       throw new NotFoundException(
-        "This content doesn't exist or aleady removed",
+        res,
       );
     }
     content.DeleteFlag = true;
@@ -196,8 +231,12 @@ export class ContentService {
     try {
       await content.save();
     } catch (error) {
-      throw new HttpException("Can't remove content", 503);
+      let res = "Can't remove content";
+      this.logger.error(res);
+     //this.logger.debug(this.EOF);
+      throw new HttpException(res, 503);
     }
+   //this.logger.debug(this.EOF);
     return await this.ContentModel.find({ _id: id }).exec();
   }
 
