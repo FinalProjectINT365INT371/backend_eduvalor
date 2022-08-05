@@ -21,7 +21,7 @@ export class ContentService {
     @Inject('winston')
     private readonly logger: Logger,
   ) {}
-  EOF = "End of Function";
+  EOF = 'End of Function';
   async findAllcontentId() {
     let contents = await this.ContentModel.find(
       {
@@ -37,14 +37,14 @@ export class ContentService {
     return contents;
   }
   async findAll() {
-    this.logger.debug("Function : Find All Content");
+    this.logger.debug('Function : Find All Content');
     let contents = await this.ContentModel.find({ DeleteFlag: false })
       .sort({ UpdateDate: 'desc' })
       .exec();
     if (contents.length == 0 || contents == null) {
       let res = "This content doesn't exist";
-      this.logger.error(res)
-     //this.logger.debug(this.EOF)
+      this.logger.error(res);
+      //this.logger.debug(this.EOF)
       throw new NotFoundException(res);
     }
     let contentList = [];
@@ -54,8 +54,8 @@ export class ContentService {
       content.TextData[0] = await this.replceImageUrl(textdata, imageList);
       contentList.push(content);
     }
-    this.logger.info(contentList)
-   //this.logger.debug(this.EOF);
+    this.logger.info(contentList);
+    //this.logger.debug(this.EOF);
     return contentList;
   }
 
@@ -70,12 +70,12 @@ export class ContentService {
       let imageList = await this.getImageInContent(id);
       content.TextData[0] = await this.replceImageUrl(textdata, imageList);
       this.logger.info(content);
-     //this.logger.debug(this.EOF);
+      //this.logger.debug(this.EOF);
       return content;
     } else {
       let res = "This content doesn't exist";
       this.logger.error(res);
-     //this.logger.debug(this.EOF);
+      //this.logger.debug(this.EOF);
       throw new NotFoundException(res);
     }
   }
@@ -93,9 +93,9 @@ export class ContentService {
     const genId = await this.generateNewId();
     this.logger.debug(`Function : Create Content - ${genId}`);
     if (createdContent.TextData.length <= 0) {
-      let res = 'This content must have some data'
+      let res = 'This content must have some data';
       this.logger.error(res);
-     //this.logger.debug(this.EOF);
+      //this.logger.debug(this.EOF);
       throw new BadRequestException(res);
     }
     createdContent._id = genId;
@@ -117,9 +117,9 @@ export class ContentService {
     try {
       await createdContent.save();
     } catch (error) {
-      let res = "Can't save new content"
+      let res = "Can't save new content";
       this.logger.error(res);
-     //this.logger.debug(this.EOF);
+      //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
     this.logger.info(createdContent);
@@ -140,17 +140,20 @@ export class ContentService {
     if (content == null) {
       let res = "This content doesn't exist";
       this.logger.error(res);
-     //this.logger.debug(this.EOF);
+      //this.logger.debug(this.EOF);
       throw new NotFoundException(res);
     }
     if (createContent.TextData.length <= 0) {
       let res = 'This content must have some data';
       this.logger.error(res);
-     //this.logger.debug(this.EOF);
+      //this.logger.debug(this.EOF);
       throw new BadRequestException(res);
     }
     content.ImageUrl.splice(0, content.ImageUrl.length);
-    await this.uploadService.removeImageS3(content._id.toString(), 'eduvalor-contents');
+    await this.uploadService.removeImageS3(
+      content._id.toString(),
+      'eduvalor-contents',
+    );
 
     if (file.length > 0) {
       file.forEach((image, index) => {
@@ -203,13 +206,13 @@ export class ContentService {
     } catch (error) {
       let res = "Can't update content";
       this.logger.error(res);
-     //this.logger.debug(this.EOF);
+      //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-   //this.logger.debug(this.EOF);
+    //this.logger.debug(this.EOF);
     let updatedContent = await this.ContentModel.find({ _id: id }).exec();
     this.logger.info(updatedContent);
-    return updatedContent
+    return updatedContent;
   }
 
   async removeById(id) {
@@ -221,10 +224,8 @@ export class ContentService {
     if (content == null) {
       let res = "This content doesn't exist or aleady removed";
       this.logger.error(res);
-     //this.logger.debug(this.EOF);
-      throw new NotFoundException(
-        res,
-      );
+      //this.logger.debug(this.EOF);
+      throw new NotFoundException(res);
     }
     content.DeleteFlag = true;
     content.UpdateDate = new Date().toLocaleString();
@@ -233,10 +234,10 @@ export class ContentService {
     } catch (error) {
       let res = "Can't remove content";
       this.logger.error(res);
-     //this.logger.debug(this.EOF);
+      //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-   //this.logger.debug(this.EOF);
+    //this.logger.debug(this.EOF);
     return await this.ContentModel.find({ _id: id }).exec();
   }
 
