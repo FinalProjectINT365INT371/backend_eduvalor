@@ -20,8 +20,10 @@ import { SearchService } from './search.service';
 
 @Controller('content')
 export class ContentController {
-  constructor(private readonly contentService: ContentService,
-              private readonly searchService: SearchService,) {}
+  constructor(
+    private readonly contentService: ContentService,
+    private readonly searchService: SearchService,
+  ) {}
 
   @Get()
   getAll() {
