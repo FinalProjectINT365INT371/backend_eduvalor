@@ -16,14 +16,21 @@ import { CreateContent } from './ContentData/dto/contentData.dto';
 import { ContentService } from './content.service';
 import { query } from 'express';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { SearchService } from './search.service';
 
 @Controller('content')
 export class ContentController {
-  constructor(private readonly contentService: ContentService) {}
+  constructor(private readonly contentService: ContentService,
+              private readonly searchService: SearchService,) {}
 
   @Get()
   getAll() {
     return this.contentService.findAll();
+  }
+
+  @Get('getContentBySearch')
+  getBySearch(@Query('search') word: string) {
+    return this.searchService.searchContent(word);
   }
 
   @Get('getContentByID')

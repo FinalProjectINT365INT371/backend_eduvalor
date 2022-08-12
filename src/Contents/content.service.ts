@@ -12,6 +12,7 @@ import { CreateContent } from './ContentData/dto/contentData.dto';
 import { ContentData } from './ContentData/contentData.schema';
 import { UploadService } from 'src/Upload/upload.service';
 import { Logger } from 'winston';
+import { SearchService } from './search.service';
 @Injectable()
 export class ContentService {
   constructor(
@@ -20,6 +21,7 @@ export class ContentService {
     private readonly uploadService: UploadService,
     @Inject('winston')
     private readonly logger: Logger,
+    private readonly searchService: SearchService,
   ) {}
   EOF = 'End of Function';
   async findAllcontentId() {

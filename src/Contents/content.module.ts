@@ -4,10 +4,11 @@ import { ContentService } from './content.service';
 import { ContentController } from './content.controller';
 import { ContentDataSchema } from './ContentData/contentData.schema';
 import { UploadModule } from 'src/Upload/upload.module';
+import { SearchService } from './search.service';
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'contentData', schema: ContentDataSchema }]), UploadModule],   
   controllers: [ContentController],
-  providers: [ ContentService],
-  exports : [ ContentService]
+  providers: [ ContentService,SearchService],
+  exports : [ ContentService,SearchService]
 })
 export class ContentModule {}
