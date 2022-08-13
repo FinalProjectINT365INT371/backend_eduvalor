@@ -12,16 +12,23 @@ export class SearchService {
     private readonly logger: Logger,
   ) {}
 
-  async searchContent(word: string) {
+  async searchContents(word: string, page: number, limit: number) {
+    page = page-1
+    if(page <= 0) {page = 0};
+    this.logger.debug('Function : Search Contents by word');
     let contents = await this.ContentModel.find({
-      Header: {$regex: `${word}`, $options: 'i'},
+      Header: { $regex: `${word}`, $options: 'i' },
       DeleteFlag: false,
     })
       .sort({ UpdateDate: 'desc' })
-      .limit(10)
+      .limit(limit)
+      .skip(page * limit)
       .exec();
     if (contents.length == 0 || contents == null) {
-      throw new NotFoundException("Doesn't has any contents");
+      let res = "Doesn't has any contents";
+      this.logger.error(res);
+      //this.logger.debug(this.EOF);
+      throw new NotFoundException(res);
     }
     return contents;
   }

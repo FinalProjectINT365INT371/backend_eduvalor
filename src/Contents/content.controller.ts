@@ -31,8 +31,12 @@ export class ContentController {
   }
 
   @Get('getContentBySearch')
-  getBySearch(@Query('search') word: string) {
-    return this.searchService.searchContent(word);
+  getBySearch(
+    @Query('search') word: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.searchService.searchContents(word, page, limit);
   }
 
   @Get('getContentByID')
