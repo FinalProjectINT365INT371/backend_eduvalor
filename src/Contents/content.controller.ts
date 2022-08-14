@@ -5,6 +5,7 @@ import {
   Get,
   NotAcceptableException,
   Param,
+  PayloadTooLargeException,
   Post,
   Put,
   Query,
@@ -25,24 +26,53 @@ export class ContentController {
     private readonly searchService: SearchService,
   ) {}
 
+  //Search Service
   @Get()
   getAll() {
     return this.contentService.findAll();
   }
 
-  @Get('getContentBySearch')
-  getBySearch(
-    @Query('search') word: string,
+  @Get('getContentBySearchFromWord')
+  getBySearchWord(
+    @Query('word') word: string,
     @Query('page') page: number,
-    @Query('limit') limit: number,
+    @Query('size') size: number,
   ) {
-    return this.searchService.searchContents(word, page, limit);
+    return this.searchService.searchContentsFromWord(word, page, size);
+  }
+
+  @Get('getContentBySearchFromCreator')
+  getBySearchCreator(
+    @Query('creator') creator: string,
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ) {
+    return this.searchService.searchContentsFromCreator(creator, page, size);
+  }
+
+  @Get('getContentBySearchFromTag')
+  getBySearchTag(
+    @Query('tag') tag: string,
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ) {
+    return this.searchService.searchContentsFromTag(tag, page, size);
+  }
+
+  @Get('getContentBySearchFromHeader')
+  getBySearchHeader(
+    @Query('header') header: string,
+    @Query('page') page: number,
+    @Query('size') size: number,
+  ) {
+    return this.searchService.searchContentsFromHeader(header, page, size);
   }
 
   @Get('getContentByID')
   getById(@Query('id') id: string) {
     return this.contentService.findById(id);
   }
+  //Search Service
 
   @Get('getImageContentByName')
   async getImageContentById(@Query('imageName') id: string) {
