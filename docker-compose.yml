@@ -3,6 +3,6 @@ services:
   nest-backend:
     build: .
     volumes:
-      - ./logs:/eduvalor/logs
+      - ./logs:/eduvalor/log
     ports:
         - '4000:4000'
