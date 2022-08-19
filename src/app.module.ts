@@ -11,6 +11,7 @@ import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
 import { AppLoggerMiddleware } from './Loggers/middleware.service';
+import { UserModule } from './Users/users.module';
 config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -19,7 +20,7 @@ config.update({
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true,})
             ,MongooseModule.forRoot(process.env.DATABASE_URL)
-            ,UserRoleModule,ContentModule,UploadModule,
+            ,UserRoleModule,ContentModule,UploadModule,UserModule,
 
             WinstonModule.forRoot({
               format: winston.format.combine(
