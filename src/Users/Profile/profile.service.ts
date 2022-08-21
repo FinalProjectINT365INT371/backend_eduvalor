@@ -27,6 +27,14 @@ export class UsersProfileService {
     return 'Hello World!';
   }
 
+  async findById(id) {
+    let userRole =  await this.UserProfileModel.findOne({ _id: id, DeleteFlag: false }).exec();
+    if (userRole == null) {
+      throw new NotFoundException("This role doesn't exist");
+    }
+    return userRole;
+  }
+
   async create(
     CreateUserProfile: CreateUserProfile,
     @UploadedFiles() file: Array<Express.Multer.File>,
