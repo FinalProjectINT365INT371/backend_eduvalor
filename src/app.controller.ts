@@ -10,8 +10,6 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { AppService } from './app.service';
-import { LoginAuthGuard } from './Auth/guard/login-auth.guard';
-import { AuthService } from './auth/auth.service';
 @Controller()
 export class AppController {
   constructor(
