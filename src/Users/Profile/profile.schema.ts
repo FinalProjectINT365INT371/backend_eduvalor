@@ -2,25 +2,25 @@ import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
 
 export interface UserProfile extends Document {
-  readonly Id: number;
-  readonly Username: string;
-  readonly Password: string;
-  readonly Firstname: string;
-  readonly Lastname: string;
-  readonly Email: string;
-  readonly Tel: string;
-  readonly Address: string;
-  readonly BirthDate: string;
-  readonly Role: string;
-  readonly ImageUrl: string;
-  readonly CreateBy: string;
-  readonly CreateDate: string;
-  readonly UpdateDate: string;
-  readonly DeleteFlag: boolean;
+  _id: Object;
+  Username: string;
+  Password: string;
+  Firstname: string;
+  Lastname: string;
+  Email: string;
+  Tel: string;
+  Address: string;
+  BirthDate: string;
+  Role: string;
+  ImageUrl: string;
+  CreateBy: string;
+  CreateDate: string;
+  UpdateDate: string;
+  DeleteFlag: boolean;
 }
 
 export const UserProfileSchema = new mongoose.Schema({
-  Id: Number,
+  _id: Object,
   Username: String,
   Password: String,
   Firstname: String,

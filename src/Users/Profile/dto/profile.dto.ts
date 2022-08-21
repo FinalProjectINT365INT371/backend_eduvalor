@@ -2,9 +2,6 @@ import { IsNotEmpty, IsNumber, IsNumberString, IsString,IsArray, IsBoolean } fro
 
 export class CreateUserProfile {
 
-    @IsNumber()
-    readonly Id: number;
-
     @IsString()
     readonly Username:string;
 
