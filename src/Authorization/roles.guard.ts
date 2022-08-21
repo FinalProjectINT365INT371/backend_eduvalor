@@ -18,7 +18,7 @@ import {
       if (!roles) return true;
       if (!user) return false;
   
-      const userRole = user.user_type.type_name;
+      const userRole = user.role;
       console.log(userRole);
       // if (userRole === ROLES.ADMIN) return true;
       const hasRole = () => roles.includes(userRole);

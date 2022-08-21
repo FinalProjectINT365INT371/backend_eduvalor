@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+ import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserProfileSchema } from './Profile/profile.schema';
 import { UsersController } from './users.controller';
 import { UsersProfileService } from './Profile/profile.service';
 import { UsersService } from './users.service';
 import { UploadModule } from 'src/Upload/upload.module';
+import { AuthModule } from 'src/Auth/auth.module';
 
 @Module({
   imports: [
@@ -17,4 +18,4 @@ import { UploadModule } from 'src/Upload/upload.module';
   providers: [UsersProfileService, UsersService],
   exports: [UsersProfileService, UsersService],
 })
-export class UserModule {}
+export class UsersModule {}

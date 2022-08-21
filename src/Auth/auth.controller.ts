@@ -1,0 +1,44 @@
+import {
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+  Res,
+  Body,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
+import { ROLES } from 'src/Authorization/ROLES';
+import { Roles } from 'src/Authorization/roles.decorator';
+import { RolesGuard } from 'src/Authorization/roles.guard';
+import { UsersProfileService } from 'src/Users/Profile/profile.service';
+import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { LoginAuthGuard } from './guard/login-auth.guard';
+@Controller('authentication')
+export class AuthController {
+  constructor(private readonly authService: AuthService 
+    ,private readonly usersProfileService:UsersProfileService) {}
+
+  @UseGuards(LoginAuthGuard)
+  @Post('login')
+  public login(@Request() req): any {
+    console.log(req.user._doc);
+    return this.authService.login(req.user._doc);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  async GetUser(@Request() req): Promise<any>{
+    const user = await this.usersProfileService.findById(req.user.user_id)
+    return user;
+  }
+
+  @UseGuards(JwtAuthGuard,RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER)
+  @Get('role')
+  async GetRole(@Request() req): Promise<any>{
+    return 'Your Developer !!';
+  }
+}

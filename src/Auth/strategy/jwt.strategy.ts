@@ -4,7 +4,7 @@ import { UsersProfileService } from '../../Users/Profile/profile.service';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(private userService: UsersProfileService) {
+  constructor(private UsersProfileService: UsersProfileService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -13,14 +13,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: any) {
-    const user = await this.userService.findById(payload.user_id);
+    const user = await this.UsersProfileService.findById(payload.id);
     console.log(user);
     
     return {
       user_id: user._id,
       name: user.Firstname,
       email: user.Email,
-      user_type: user.Role,
+      role: user.Role,
     };
   }
 
