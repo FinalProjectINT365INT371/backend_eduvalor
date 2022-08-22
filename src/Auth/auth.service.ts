@@ -9,13 +9,16 @@ export class AuthService {
   constructor(
     private userProfileService: UsersProfileService,
     private jwtService: JwtService,
+    @Inject('winston')
+    private readonly logger: Logger,
   ) {}
 
   async validateUser(username: string, password: string): Promise<any> {
-    console.log('validate-authservice');
+    this.logger.debug('Validate-authservice');
     const user = await this.userProfileService.findByUsername(username);
     const bcrypt = require('bcrypt');
     const passwordChange = await bcrypt.hash(password, 10);
+    this.logger.debug('Bcrypt password');
     console.log(passwordChange);
     console.log(user.Password);
     console.log(await bcrypt.compare(password, user.Password));
@@ -28,12 +31,14 @@ export class AuthService {
   }
 
   async login(user: any) {
+
     const Access_Token = await this.generateAccessToken(user);
     return {
       access_token: Access_Token,
     };
   }
   async generateAccessToken(user: any): Promise<string> {
+    this.logger.debug('Generate access_token');
     const payloadAccessToken = {
       id: user._id,
       Role: user.Role,
