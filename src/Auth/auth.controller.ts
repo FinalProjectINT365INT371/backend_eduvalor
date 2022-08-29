@@ -14,12 +14,14 @@ import {
 import { ROLES } from 'src/Authorization/ROLES';
 import { Roles } from 'src/Authorization/roles.decorator';
 import { RolesGuard } from 'src/Authorization/roles.guard';
+import { CreateUserProfile } from 'src/Users/Profile/dto/profile.dto';
 import { UsersProfileService } from 'src/Users/Profile/profile.service';
 import { Logger } from 'winston';
 import { AuthService } from './auth.service';
 import { FacebookAuthGuard } from './guard/facebook-auth.guard';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { LoginAuthGuard } from './guard/login-auth.guard';
+import { firstValueFrom } from 'rxjs';
 @Controller('authentication')
 export class AuthController {
   constructor(
@@ -58,10 +60,12 @@ export class AuthController {
 
   @Get("/facebook/redirect")
   @UseGuards(FacebookAuthGuard)
-  async facebookLoginRedirect(@Request() req): Promise<any> {
+  async facebookLoginRedirect(@Req() req): Promise<any> {
+    let user = await this.usersProfileService.createByFB(req.user);
     return {
       statusCode: HttpStatus.OK,
       data: req.user,
+      user: user
     };
   }
 }

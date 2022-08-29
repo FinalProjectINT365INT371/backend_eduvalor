@@ -9,35 +9,38 @@ import {
 
 export class CreateUserProfile {
   @IsString()
-  readonly Username: string;
+  Username: string;
 
   @IsString()
-  readonly Password: string;
+  Password: string;
 
   @IsString()
-  readonly Firstname: string;
+  Firstname: string;
 
   @IsString()
-  readonly Lastname: string;
+  Lastname: string;
 
   @IsString()
-  readonly Email: string;
+  Email: string;
 
   @IsString()
-  readonly Tel: string;
+  Tel: string;
 
   @IsString()
-  readonly Address: string;
+  Address: string;
 
   @IsString()
-  readonly BirthDate: string;
+  BirthDate: string;
 
   @IsString()
-  readonly Role: string;
+  Role: string;
 
   @IsString()
-  readonly CreateBy: string;
+  CreateBy: string;
 
   @IsBoolean()
-  readonly DeleteFlag: boolean;
+ DeleteFlag: boolean;
+
+ @IsString()
+ PSID: string;
 }

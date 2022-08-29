@@ -27,8 +27,19 @@ export class UsersProfileService {
     return 'Hello World!';
   }
 
+  async findByPSID(psid) {
+    let userProfile = await this.UserProfileModel.findOne({
+      PSID: psid,
+      DeleteFlag: false,
+    }).exec();
+    return userProfile;
+  }
+
   async findById(id) {
-    let userProfile =  await this.UserProfileModel.findOne({ _id: id, DeleteFlag: false }).exec();
+    let userProfile = await this.UserProfileModel.findOne({
+      _id: id,
+      DeleteFlag: false,
+    }).exec();
     if (userProfile == null) {
       throw new NotFoundException("This user doesn't exist");
     }
@@ -36,26 +47,45 @@ export class UsersProfileService {
   }
 
   async findByUsername(username) {
-    let userProfile =  await this.UserProfileModel.findOne({ Username: username, DeleteFlag: false }).exec();
+    let userProfile = await this.UserProfileModel.findOne({
+      Username: username,
+      DeleteFlag: false,
+    }).exec();
     if (userProfile == null) {
       throw new NotFoundException("This user doesn't exist");
     }
     return userProfile;
   }
 
+  async createByFB(req :any) : Promise<any>{
+    let file = [];
+    let createUser = new CreateUserProfile;
+    let findUser = await this.findByPSID(req.user.psid);
+    console.log(findUser); 
+    if(findUser == null){
+      createUser.Email = req.user.email;
+      createUser.Firstname = req.user.firstName;
+      createUser.Lastname = req.user.lastName;
+      createUser.PSID = req.user.psid;
+      createUser.DeleteFlag = false;
+      console.log(createUser);   
+      let user = await this.create(createUser, file);
+    }
+  }
+
   async create(
     CreateUserProfile: CreateUserProfile,
     @UploadedFiles() file: Array<Express.Multer.File>,
   ): Promise<UserProfile> {
-    const bcrypt = require("bcrypt");
+    const bcrypt = require('bcrypt');
     const createdUser = new this.UserProfileModel(CreateUserProfile);
     const genId = await this.generateNewId();
     this.logger.debug(`Function : Create User - ${genId}`);
     createdUser._id = genId;
-
-    const passwordChange = await bcrypt.hash(createdUser.Password,10,)
-    createdUser.Password = passwordChange
-
+    if (createdUser.Password != null) {
+      const passwordChange = await bcrypt.hash(createdUser.Password, 10);
+      createdUser.Password = passwordChange;
+    }
     createdUser.CreateDate = new Date().toLocaleString();
     createdUser.UpdateDate = new Date().toLocaleString();
     if (file.length > 0) {
