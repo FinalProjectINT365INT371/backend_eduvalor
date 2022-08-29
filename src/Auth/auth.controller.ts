@@ -8,6 +8,8 @@ import {
   Body,
   Inject,
   forwardRef,
+  HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { ROLES } from 'src/Authorization/ROLES';
 import { Roles } from 'src/Authorization/roles.decorator';
@@ -15,6 +17,7 @@ import { RolesGuard } from 'src/Authorization/roles.guard';
 import { UsersProfileService } from 'src/Users/Profile/profile.service';
 import { Logger } from 'winston';
 import { AuthService } from './auth.service';
+import { FacebookAuthGuard } from './guard/facebook-auth.guard';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { LoginAuthGuard } from './guard/login-auth.guard';
 @Controller('authentication')
@@ -45,5 +48,20 @@ export class AuthController {
   @Get('role')
   async GetRole(@Request() req): Promise<any> {
     return 'Your Developer !!';
+  }
+
+  @Get("/facebook")
+  @UseGuards(FacebookAuthGuard)
+  async facebookLogin(): Promise<any> {
+    return HttpStatus.OK;
+  }
+
+  @Get("/facebook/redirect")
+  @UseGuards(FacebookAuthGuard)
+  async facebookLoginRedirect(@Request() req): Promise<any> {
+    return {
+      statusCode: HttpStatus.OK,
+      data: req.user,
+    };
   }
 }

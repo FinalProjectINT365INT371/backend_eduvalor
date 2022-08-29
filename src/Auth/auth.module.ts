@@ -7,6 +7,7 @@ import { LoginStrategy } from './strategy/login.strategy';
 import { UsersModule } from '../Users/users.module';
 import { AppModule } from 'src/app.module';
 import { AuthController } from './auth.controller';
+import { FacebookStrategy } from './strategy/facebook.strategy';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { AuthController } from './auth.controller';
       secret: process.env.JWT_SECRET,
     }),
   ],
-  providers: [AuthService, JwtStrategy, LoginStrategy],
+  providers: [AuthService, JwtStrategy, LoginStrategy,FacebookStrategy],
   exports: [AuthService],
   controllers:[AuthController]
 })
