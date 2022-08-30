@@ -57,21 +57,21 @@ export class UsersProfileService {
     return userProfile;
   }
 
-  async createByFB(req :any) : Promise<any>{
+  async createByFB(req: any): Promise<any> {
     let file = [];
-    let createUser = new CreateUserProfile;
+    let createUser = new CreateUserProfile();
     let findUser = await this.findByPSID(req.user.psid);
-    console.log(findUser); 
-    if(findUser == null){
+    console.log(findUser);
+    if (findUser == null) {
       createUser.Email = req.user.email;
       createUser.Firstname = req.user.firstName;
       createUser.Lastname = req.user.lastName;
       createUser.PSID = req.user.psid;
       createUser.DeleteFlag = false;
-      createUser.Role = 'ContentCreator'
-      console.log(createUser);   
+      createUser.Role = 'ContentCreator';
+      console.log(createUser);
       let user = await this.create(createUser, file);
-      return user
+      return user;
     }
     return findUser;
   }

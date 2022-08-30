@@ -52,13 +52,13 @@ export class AuthController {
     return 'Your Developer !!';
   }
 
-  @Get("/facebook")
+  @Get('/facebook')
   @UseGuards(FacebookAuthGuard)
   async facebookLogin(): Promise<any> {
     return HttpStatus.OK;
   }
 
-  @Get("/facebook/redirect")
+  @Get('/facebook/redirect')
   @UseGuards(FacebookAuthGuard)
   async facebookLoginRedirect(@Req() req): Promise<any> {
     let user = await this.usersProfileService.createByFB(req.user);
@@ -66,8 +66,8 @@ export class AuthController {
     return {
       statusCode: HttpStatus.OK,
       facebookData: req.user,
-      accessTokenApp : access_token,
-      userApp: user
+      accessTokenApp: access_token,
+      userApp: user,
     };
   }
 }

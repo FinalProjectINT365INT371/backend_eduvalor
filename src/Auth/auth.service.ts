@@ -31,7 +31,6 @@ export class AuthService {
   }
 
   async login(user: any) {
-
     const Access_Token = await this.generateAccessToken(user);
     return {
       access_token: Access_Token,
