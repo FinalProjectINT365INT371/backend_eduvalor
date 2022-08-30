@@ -35,7 +35,10 @@ jobs:
                    echo 'AWS_REGION=$AWS_REGION' >> .env ;
                    echo 'JWT_SECRET=$JWT_SECRET' >> .env ;
                    echo 'EXPIREDATETOKEN=$EXPIREDATETOKEN' >> .env ;
-                   echo 'EXPIREDATEREFRESHTOKEN=$EXPIREDATEREFRESHTOKEN' 
+                   echo 'EXPIREDATEREFRESHTOKEN=$EXPIREDATEREFRESHTOKEN' >> .env ;
+                   echo 'FACEBOOK_APP_ID=$FACEBOOK_APP_ID' >> .env ;
+                   echo 'FACEBOOK_APP_SECRET=$FACEBOOK_APP_SECRET' >> .env ;
+                   echo 'FACEBOOK_CALL_BACK_URL=$FACEBOOK_CALL_BACK_URL' >> .env ; 
                    chmod +x ./deploy_dev.sh ;
                    ./deploy_dev.sh"
 
