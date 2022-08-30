@@ -62,10 +62,12 @@ export class AuthController {
   @UseGuards(FacebookAuthGuard)
   async facebookLoginRedirect(@Req() req): Promise<any> {
     let user = await this.usersProfileService.createByFB(req.user);
+    let access_token = await this.authService.login(user);
     return {
       statusCode: HttpStatus.OK,
-      data: req.user,
-      user: user
+      facebookData: req.user,
+      accessTokenApp : access_token,
+      userApp: user
     };
   }
 }

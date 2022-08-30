@@ -19,11 +19,12 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
   }
 
   async validate(
-    accessToken: string,
+    accessTokenFacebook: string,
     refreshToken: string,
     profile: Profile,
     done: (err: any, user: any, info?: any) => void,
   ): Promise<any> {
+    this.logger.debug('Function : Validate Facebook User');
     const { name, emails, id } = profile;
     const user = {
       email: emails[0].value,
@@ -31,9 +32,10 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
       lastName: name.familyName,
       psid: id,
     };
+    this.logger.debug('Assign Facebook Token');
     const payload = {
       user,
-      accessToken,
+      accessTokenFacebook,
     };
 
     done(null, payload);

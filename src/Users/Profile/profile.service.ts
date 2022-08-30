@@ -68,9 +68,12 @@ export class UsersProfileService {
       createUser.Lastname = req.user.lastName;
       createUser.PSID = req.user.psid;
       createUser.DeleteFlag = false;
+      createUser.Role = 'ContentCreator'
       console.log(createUser);   
       let user = await this.create(createUser, file);
+      return user
     }
+    return findUser;
   }
 
   async create(
