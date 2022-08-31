@@ -38,7 +38,10 @@ jobs:
                    echo 'EXPIREDATEREFRESHTOKEN=$EXPIREDATEREFRESHTOKEN' >> .env ;
                    echo 'FACEBOOK_APP_ID=$FACEBOOK_APP_ID' >> .env ;
                    echo 'FACEBOOK_APP_SECRET=$FACEBOOK_APP_SECRET' >> .env ;
-                   echo 'FACEBOOK_CALL_BACK_URL=$FACEBOOK_CALL_BACK_URL' >> .env ; 
+                   echo 'FACEBOOK_CALL_BACK_URL=$FACEBOOK_CALL_BACK_URL' >> .env ;
+                   echo 'GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID' >> .env ;
+                   echo 'GOOGLE_SECRET=$GOOGLE_SECRET' >> .env ;
+                   echo 'GOOGLE_CALL_BACK_URL=$GOOGLE_CALL_BACK_URL' >> .env ;
                    chmod +x ./deploy_dev.sh ;
                    ./deploy_dev.sh"
 
