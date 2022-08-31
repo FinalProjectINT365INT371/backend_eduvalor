@@ -27,6 +27,15 @@ export class UsersProfileService {
     return 'Hello World!';
   }
 
+  async findByEmail(email) {
+    let userProfile = await this.UserProfileModel.findOne({
+      Email: email,
+      GoogleAccess: true,
+      DeleteFlag: false,
+    }).exec();
+    return userProfile;
+  }
+
   async findByPSID(psid) {
     let userProfile = await this.UserProfileModel.findOne({
       PSID: psid,
@@ -69,6 +78,7 @@ export class UsersProfileService {
       createUser.PSID = req.user.psid;
       createUser.DeleteFlag = false;
       createUser.Role = 'ContentCreator';
+      createUser.GoogleAccess = false;
       console.log(createUser);
       let user = await this.create(createUser, file);
       return user;
@@ -76,6 +86,25 @@ export class UsersProfileService {
     return findUser;
   }
 
+  async createByGoogle(req: any): Promise<any> {
+    let file = [];
+    let createUser = new CreateUserProfile();
+    let findUser = await this.findByEmail(req.user.email);
+    console.log(findUser);
+    if (findUser == null) {
+      createUser.Email = req.user.email;
+      createUser.Firstname = req.user.firstName;
+      createUser.Lastname = req.user.lastName;
+      createUser.PSID = '';
+      createUser.DeleteFlag = false;
+      createUser.Role = 'ContentCreator';
+      createUser.GoogleAccess = true;
+      console.log(createUser);
+      let user = await this.create(createUser, file);
+      return user;
+    }
+    return findUser;
+  }
   async create(
     CreateUserProfile: CreateUserProfile,
     @UploadedFiles() file: Array<Express.Multer.File>,
@@ -88,6 +117,12 @@ export class UsersProfileService {
     if (createdUser.Password != null) {
       const passwordChange = await bcrypt.hash(createdUser.Password, 10);
       createdUser.Password = passwordChange;
+    }
+    if (createdUser.PSID == '' || createdUser.PSID == null) {
+      createdUser.PSID = '';
+    }
+    if (createdUser.GoogleAccess == null) {
+      createdUser.GoogleAccess = false;
     }
     createdUser.CreateDate = new Date().toLocaleString();
     createdUser.UpdateDate = new Date().toLocaleString();

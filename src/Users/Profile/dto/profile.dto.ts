@@ -39,8 +39,11 @@ export class CreateUserProfile {
   CreateBy: string;
 
   @IsBoolean()
- DeleteFlag: boolean;
+  DeleteFlag: boolean;
 
- @IsString()
- PSID: string;
+  @IsString()
+  PSID: string;
+
+  @IsBoolean()
+  GoogleAccess: boolean;
 }

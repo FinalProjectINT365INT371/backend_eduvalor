@@ -17,7 +17,8 @@ export interface UserProfile extends Document {
   CreateDate: string;
   UpdateDate: string;
   DeleteFlag: boolean;
-  PSID:string;
+  PSID: string;
+  GoogleAccess: boolean;
 }
 
 export const UserProfileSchema = new mongoose.Schema({
@@ -36,5 +37,6 @@ export const UserProfileSchema = new mongoose.Schema({
   CreateDate: String,
   UpdateDate: String,
   DeleteFlag: Boolean,
-  PSID:String,
+  PSID: String,
+  GoogleAccess: Boolean,
 });

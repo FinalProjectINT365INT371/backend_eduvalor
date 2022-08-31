@@ -22,6 +22,7 @@ import { FacebookAuthGuard } from './guard/facebook-auth.guard';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { LoginAuthGuard } from './guard/login-auth.guard';
 import { firstValueFrom } from 'rxjs';
+import { GoogleAuthGuard } from './guard/google-auth.guard';
 @Controller('authentication')
 export class AuthController {
   constructor(
@@ -62,6 +63,26 @@ export class AuthController {
   @UseGuards(FacebookAuthGuard)
   async facebookLoginRedirect(@Req() req): Promise<any> {
     let user = await this.usersProfileService.createByFB(req.user);
+    let access_token = await this.authService.login(user);
+    return {
+      statusCode: HttpStatus.OK,
+      facebookData: req.user,
+      accessTokenApp: access_token,
+      userApp: user,
+    };
+  }
+
+  @Get('/google')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuth(@Req() req) {}
+
+  @Get('/google/redirect')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuthRedirect(@Req() req) {
+    if (!req.user) {
+      return 'No user from google';
+    }
+    let user = await this.usersProfileService.createByGoogle(req.user);
     let access_token = await this.authService.login(user);
     return {
       statusCode: HttpStatus.OK,
