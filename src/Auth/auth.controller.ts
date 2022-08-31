@@ -86,7 +86,7 @@ export class AuthController {
     let access_token = await this.authService.login(user);
     return {
       statusCode: HttpStatus.OK,
-      facebookData: req.user,
+      googleData: req.user,
       accessTokenApp: access_token,
       userApp: user,
     };
