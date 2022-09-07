@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GoogleMapsService extends Client {
-  private readonly accessKey = this.config.get('GOOGLE_MAPS_ACCESS_KEY');
+  private readonly accessKey = this.config.get(process.env.GOOGLE_MAPS_ACCESS_KEY);
 
   constructor(private config: ConfigService) {
     super();
