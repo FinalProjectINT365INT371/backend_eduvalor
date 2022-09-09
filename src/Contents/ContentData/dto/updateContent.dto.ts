@@ -8,11 +8,11 @@ export class UpdateContent {
 
 
     @IsArray()
-    readonly TextData:string;
+    readonly TextData:[string];
 
 
     @IsArray()
-    readonly ContentCategory:string;
+    readonly ContentCategory:[string];
 
     // @IsString()
     // @IsArray()
