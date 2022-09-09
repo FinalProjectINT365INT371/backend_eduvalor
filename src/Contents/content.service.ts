@@ -13,6 +13,7 @@ import { ContentData } from './ContentData/contentData.schema';
 import { UploadService } from 'src/Upload/upload.service';
 import { Logger } from 'winston';
 import { SearchService } from './search.service';
+import { UpdateContent } from './ContentData/dto/updateContent.dto';
 @Injectable()
 export class ContentService {
   constructor(
@@ -103,6 +104,7 @@ export class ContentService {
     createdContent._id = genId;
     createdContent.CreateDate = new Date().toLocaleString();
     createdContent.UpdateDate = new Date().toLocaleString();
+    createdContent.DeleteFlag = false;
     if (file.length > 0) {
       file.forEach((image, index) => {
         let imageName = genId + '_' + index++;
@@ -131,7 +133,7 @@ export class ContentService {
 
   async updateContent(
     id,
-    createContent: CreateContent,
+    createContent: UpdateContent,
     @UploadedFiles() file: Array<Express.Multer.File>,
   ) {
     let content = await this.ContentModel.findOne({

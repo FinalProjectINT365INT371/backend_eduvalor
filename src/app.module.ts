@@ -63,7 +63,7 @@ config.update({
     ContentModule,
     UploadModule,
     AuthModule,
-    GoogleMapsModule,
+    //GoogleMapsModule,
   ],
 
   controllers: [AppController],

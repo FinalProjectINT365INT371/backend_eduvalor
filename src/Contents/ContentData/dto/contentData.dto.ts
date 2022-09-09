@@ -6,26 +6,26 @@ export class CreateContent {
     @IsString()
     readonly Header:string;
 
-    @IsString()
-    @IsArray()
-    readonly TextData:string;
 
-    @IsString()
     @IsArray()
-    readonly ContentCategory:string;
+    readonly TextData:[string];
 
-    @IsString()
+
     @IsArray()
-    readonly ImageUrl:[String];
+    readonly ContentCategory:[string];
+
+    // @IsString()
+    // @IsArray()
+    // readonly ImageUrl:[String];
     
-    @IsArray()
-    readonly ImageFile: [File]
+    // @IsArray()
+    // readonly ImageFile: [File]
 
     @IsString()
     readonly CreateBy: string;
 
-    @IsBoolean()
-    readonly DeleteFlag: boolean;
+    // @IsString()
+    // readonly DeleteFlag: string;
 
 
 }

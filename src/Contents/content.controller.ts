@@ -12,13 +12,15 @@ import {
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
+  UsePipes,
 } from '@nestjs/common';
 import { CreateContent } from './ContentData/dto/contentData.dto';
 import { ContentService } from './content.service';
 import { query } from 'express';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { SearchService } from './search.service';
-
+import { ValidationPipe } from '../validation.pipe';
+import { UpdateContent } from './ContentData/dto/updateContent.dto';
 @Controller('content')
 export class ContentController {
   constructor(
@@ -83,6 +85,7 @@ export class ContentController {
   async getImageInContent(@Query('ContentId') id: string) {
     return await this.contentService.getImageInContent(id);
   }
+  @UsePipes(ValidationPipe)
   @Post('addcontent')
   @UseInterceptors(FilesInterceptor('ImageFiles'))
   async create(
@@ -97,11 +100,12 @@ export class ContentController {
     }
     return `Have some error`;
   }
+  @UsePipes(ValidationPipe)
   @Put('editcontent')
   @UseInterceptors(FilesInterceptor('ImageFiles'))
   async edit(
     @Query('id') id: string,
-    @Body() createContent: CreateContent,
+    @Body() createContent: UpdateContent,
     @UploadedFiles() file: Array<Express.Multer.File>,
   ) {
     let contentUpdated = await this.contentService.updateContent(

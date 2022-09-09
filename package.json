@@ -37,6 +37,7 @@
     "@types/passport-local": "^1.0.34",
     "aws-sdk": "^2.1188.0",
     "bcrypt": "^5.0.1",
+    "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "dotenv": "^16.0.2",
     "mongoose": "^6.3.0",
