@@ -11,10 +11,12 @@ import {
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
+  UsePipes,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { UsersProfileService } from './Profile/profile.service';
 import { CreateUserProfile } from './Profile/dto/profile.dto';
+import { ValidationPipe } from 'src/validation.pipe';
 
 @Controller('user')
 export class UsersController {
@@ -24,7 +26,8 @@ export class UsersController {
   getAll() {
     return this.UsersProfileService.getHello();
   }
-
+  
+  @UsePipes(ValidationPipe)
   @Post('adduser')
   @UseInterceptors(FilesInterceptor('ImageFile'))
   async create(

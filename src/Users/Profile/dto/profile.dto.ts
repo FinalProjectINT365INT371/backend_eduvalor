@@ -5,6 +5,9 @@ import {
   IsString,
   IsArray,
   IsBoolean,
+  isEmpty,
+  IsEmpty,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateUserProfile {
@@ -35,15 +38,19 @@ export class CreateUserProfile {
   @IsString()
   Role: string;
 
+  @IsOptional()
   @IsString()
-  CreateBy: string;
+  CreateBy?: string;
 
+  @IsOptional()
   @IsBoolean()
-  DeleteFlag: boolean;
+  DeleteFlag?: boolean;
 
+  @IsOptional()
   @IsString()
-  PSID: string;
+  PSID?: string;
 
+  @IsOptional()
   @IsBoolean()
-  GoogleAccess: boolean;
+  GoogleAccess?: boolean;
 }
