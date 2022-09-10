@@ -91,6 +91,7 @@ export class ContentService {
   async create(
     createContent: CreateContent,
     @UploadedFiles() file: Array<Express.Multer.File>,
+    @UploadedFiles() cover: Array<Express.Multer.File>,
   ): Promise<ContentData> {
     const createdContent = new this.ContentModel(createContent);
     const genId = await this.generateNewId();
@@ -105,13 +106,26 @@ export class ContentService {
     createdContent.CreateDate = new Date().toLocaleString();
     createdContent.UpdateDate = new Date().toLocaleString();
     createdContent.DeleteFlag = false;
-    if (file.length > 0) {
-      file.forEach((image, index) => {
-        let imageName = genId + '_' + index++;
-        let fileName = genId + '/' + imageName + '.png';
-        this.uploadService.uploadFile(image, 'eduvalor-contents', fileName);
-        createdContent.ImageUrl.push(genId + '/' + imageName + '.png');
-      });
+    if (typeof file !== 'undefined') {
+      if (file.length > 0) {
+        file.forEach((image, index) => {
+          let imageName = genId + '_' + index++;
+          let fileName = genId + '/' + imageName + '.png';
+          this.uploadService.uploadFile(image, 'eduvalor-contents', fileName);
+          createdContent.ImageUrl.push(genId + '/' + imageName + '.png');
+        });
+      }
+    }
+
+    if (typeof cover !== 'undefined') {
+      if (cover.length > 0) {
+        cover.forEach((image, index) => {
+          let imageName = 'cover';
+          let fileName = genId + '/' + imageName + '.png';
+          this.uploadService.uploadFile(image, 'eduvalor-contents', fileName);
+          createdContent.ImageUrl.push(genId + '/' + imageName + '.png');
+        });
+      }
     }
     let textData = createdContent.TextData[0];
     createdContent.TextData[0] = this.replceImageName(
@@ -135,6 +149,7 @@ export class ContentService {
     id,
     createContent: UpdateContent,
     @UploadedFiles() file: Array<Express.Multer.File>,
+    @UploadedFiles() cover: Array<Express.Multer.File>,
   ) {
     let content = await this.ContentModel.findOne({
       _id: id,
@@ -158,49 +173,28 @@ export class ContentService {
       content._id.toString(),
       'eduvalor-contents',
     );
+    if (typeof file !== 'undefined') {
+      if (file.length > 0) {
+        file.forEach((image, index) => {
+          let imageName = content._id + '_' + index++;
+          let fileName = content._id + '/' + imageName + '.png';
+          this.uploadService.uploadFile(image, 'eduvalor-contents', fileName);
+          content.ImageUrl.push(content._id + '/' + imageName + '.png');
+        });
+        let textData = createContent.TextData[0];
+        content.TextData[0] = this.replceImageName(textData, content.ImageUrl);
+      }
+    }
 
-    if (file.length > 0) {
-      file.forEach((image, index) => {
-        let imageName = content._id + '_' + index++;
-        let fileName = content._id + '/' + imageName + '.png';
-        this.uploadService.uploadFile(image, 'eduvalor-contents', fileName);
-        content.ImageUrl.push(content._id + '/' + imageName + '.png');
-      });
-      let textData = createContent.TextData[0];
-      //console.log(createContent.TextData[0]);
-      content.TextData[0] = this.replceImageName(textData, content.ImageUrl);
-      //console.log(content.TextData[0]);
-      // console.log(content.ImageUrl);
-      // let imagesOfContent = Promise.resolve(
-      //   await this.uploadService.getImageList(
-      //     content._id.toString(),
-      //     'content',
-      //   ),
-      // );
-      // let imagesOfContents = imagesOfContent[0];
-      // console.log(imagesOfContents);
-
-      // const removeNotuseImages = (ImageUrl, imagesOfContents) => {
-      //   const spreaded = [...ImageUrl, ...imagesOfContents];
-      //   return spreaded.filter((el) => {
-      //     return !(ImageUrl.includes(el) && imagesOfContents.includes(el));
-      //   });
-      // };
-
-      // console.log(removeNotuseImages(content.ImageUrl, imagesOfContent));
-      // let ImagestoRemove = removeNotuseImages(
-      //   content.ImageUrl,
-      //   imagesOfContent,
-      // );
-      // if (ImagestoRemove.length > 0) {
-      //   ImagestoRemove.forEach((item) => {
-      //     var index = content.ImageUrl.indexOf(item);
-      //     if (index !== -1) {
-      //       content.ImageUrl.splice(index, 1);
-      //     }
-      //     this.uploadService.removeImage(item, 'content');
-      //   });
-      // }
+    if (typeof cover !== 'undefined') {
+      if (cover.length > 0) {
+        cover.forEach((image, index) => {
+          let imageName = 'cover';
+          let fileName = content._id + '/' + imageName + '.png';
+          this.uploadService.uploadFile(image, 'eduvalor-contents', fileName);
+          content.ImageUrl.push(content._id + '/' + imageName + '.png');
+        });
+      }
     }
 
     await content.updateOne(createContent).exec();

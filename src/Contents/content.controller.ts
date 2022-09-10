@@ -17,7 +17,7 @@ import {
 import { CreateContent } from './ContentData/dto/contentData.dto';
 import { ContentService } from './content.service';
 import { query } from 'express';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor,FileFieldsInterceptor } from '@nestjs/platform-express';
 import { SearchService } from './search.service';
 import { ValidationPipe } from '../validation.pipe';
 import { UpdateContent } from './ContentData/dto/updateContent.dto';
@@ -87,14 +87,22 @@ export class ContentController {
   }
   @UsePipes(ValidationPipe)
   @Post('addcontent')
-  @UseInterceptors(FilesInterceptor('ImageFiles'))
+  @UseInterceptors(FileFieldsInterceptor([
+    { name: 'ImageFiles' },
+    { name: 'ImageCover', maxCount: 1 },
+  ]))
+  
   async create(
-    @UploadedFiles() file: Array<Express.Multer.File>,
+    @UploadedFiles() files: { ImageFiles?: Array<Express.Multer.File>, ImageCover?: Array<Express.Multer.File> },
     @Body() createContent: CreateContent,
   ) {
-    console.log(file);
+    console.log(files);
     console.log(createContent);
-    let contentCreated = await this.contentService.create(createContent, file);
+    let contentCreated = await this.contentService.create(
+      createContent,
+      files.ImageFiles,
+      files.ImageCover,
+    );
     if (contentCreated != null) {
       return `Save new content successful : ${contentCreated.id}`;
     }
@@ -102,16 +110,20 @@ export class ContentController {
   }
   @UsePipes(ValidationPipe)
   @Put('editcontent')
-  @UseInterceptors(FilesInterceptor('ImageFiles'))
+  @UseInterceptors(FileFieldsInterceptor([
+    { name: 'ImageFiles' },
+    { name: 'ImageCover', maxCount: 1 },
+  ]))
   async edit(
     @Query('id') id: string,
-    @Body() createContent: UpdateContent,
-    @UploadedFiles() file: Array<Express.Multer.File>,
+    @Body() updateContent: UpdateContent,
+    @UploadedFiles() files: { ImageFiles?: Array<Express.Multer.File>, ImageCover?: Array<Express.Multer.File> },
   ) {
     let contentUpdated = await this.contentService.updateContent(
       id,
-      createContent,
-      file,
+      updateContent,
+      files.ImageFiles,
+      files.ImageCover,
     );
     if (contentUpdated != null) {
       return `Update content successful : ${contentUpdated[0].id}`;
