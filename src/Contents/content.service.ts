@@ -169,9 +169,9 @@ export class ContentService {
       throw new BadRequestException(res);
     }
     content.ImageUrl.splice(0, content.ImageUrl.length);
-    await this.uploadService.removeImageS3(
-      content._id.toString(),
+    await this.uploadService.removeImageS3Directory(
       'eduvalor-contents',
+      content._id.toString(),
     );
     if (typeof file !== 'undefined') {
       if (file.length > 0) {

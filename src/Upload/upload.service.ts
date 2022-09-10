@@ -101,6 +101,25 @@ export class UploadService {
     //if not found FE use url and check HttpStatus
   }
 
+  async removeImageS3Directory(bucket, dir) {
+    const listParams = {
+      Bucket: bucket,
+      Prefix: dir,
+    };
+    const s3 = new S3();
+    const listedObjects = await s3.listObjectsV2(listParams).promise();
+    if (listedObjects.Contents.length === 0) return;
+    const deleteParams = {
+      Bucket: bucket,
+      Delete: { Objects: [] },
+    };
+    listedObjects.Contents.forEach(({ Key }) => {
+      deleteParams.Delete.Objects.push({ Key });
+    });
+    await s3.deleteObjects(deleteParams).promise();
+    if (listedObjects.IsTruncated) await this.removeImageS3Directory(bucket, dir);
+  }
+
   async getSignedUrlS3(imageName: string, Buckets: string) {
     const s3 = new S3();
     const param = { Bucket: Buckets, Key: imageName };

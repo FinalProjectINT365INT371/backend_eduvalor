@@ -72,10 +72,10 @@ export class UploadController {
     return this.uploadService. uploadFile(file, 'eduvalorucket', filedata.originalname);
   }
 
-  @Delete('Upload/removeImageS3')
-  removeImageS3(@Query('imageName') imageName: string) {
-    return this.uploadService.removeImageS3(imageName, 'eduvalorucket');
-  }
+   @Delete('Upload/removeImageS3')
+   removeImageS3(@Query('imageName') imageName: string) {
+     return this.uploadService.removeImageS3(imageName, 'eduvalor-contents');
+   }
 
   @Get('Upload/GetImageS3')
   getImageS3(@Query('imageName') imageName: string) {
@@ -93,5 +93,10 @@ export class UploadController {
     if (data.length === 0) {
       throw new NotFoundException('Not found images in this folder');
     } else return data;
+  }
+  
+  @Delete('Upload/removeImageS3Directory')
+  removeImageS3Directory(@Query('directory') directory :string) {
+    return this.uploadService.removeImageS3Directory('eduvalor-contents',directory );
   }
 }
