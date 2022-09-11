@@ -55,3 +55,7 @@ workflows:
           filters:
             branches:
               only: develop
+      - production:
+          filters:
+            branches:
+              only: main
