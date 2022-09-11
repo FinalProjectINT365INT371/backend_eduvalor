@@ -91,7 +91,7 @@ jobs:
                    echo 'PORT_PRODUCTION=$PORT_PRODUCTION' >> .env ;
                    echo 'PORT_DEV=$PORT_DEV' >> .env ;
                    chmod +x ./deploy_dev.sh ;
-                   ./deploy_dev.sh"
+                   ./deploy_prod.sh"
 
 workflows:
   version: 2
