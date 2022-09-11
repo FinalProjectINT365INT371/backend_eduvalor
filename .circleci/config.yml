@@ -47,7 +47,7 @@ jobs:
                    chmod +x ./deploy_dev.sh ;
                    ./deploy_dev.sh"
 
-   production:
+  production:
     docker:
       - image: 'cimg/node:17.9.0'
     steps:
