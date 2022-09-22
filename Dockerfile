@@ -6,6 +6,9 @@ COPY package.json yarn.lock /eduvalor/
 
 RUN yarn
 
+RUN apk update && \
+    apk add --no-cache tzdata
+
 COPY . .
 
 RUN yarn build
