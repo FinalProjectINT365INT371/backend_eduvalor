@@ -2,6 +2,8 @@ version: '3'
 services:
   nest-backend-prod:
     build: .
+    environment:
+      - TZ=Asia/Bangkok
     volumes:
       - ./logs:/eduvalor/log
     ports:
