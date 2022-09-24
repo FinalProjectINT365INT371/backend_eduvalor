@@ -166,19 +166,20 @@ export class UsersProfileService {
       //this.logger.debug(this.EOF);
       throw new NotFoundException(res);
     }
-
+    
+    console.log( user.ImageUrl);
     await this.uploadService.removeImageS3(
+      user.ImageUrl,
       'eduvalor-users',
-      user.ImageUrl.toString(),
     );
     if (typeof file !== 'undefined') {
       if (file.length > 0) {
         file.forEach((image, index) => {
           if (index == 0) {
-            let imageName = user.id + '_' + 'PF';
-            let fileName = user.id + '/' + imageName + '.png';
+            let imageName = user._id + '_' + 'PF';
+            let fileName = user._id + '/' + imageName + '.png';
             this.uploadService.uploadFile(image, 'eduvalor-users', fileName);
-            user.ImageUrl = user.id + '/' + imageName + '.png';
+            user.ImageUrl = user._id + '/' + imageName + '.png';
           }
         });
       }

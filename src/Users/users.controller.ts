@@ -28,7 +28,12 @@ export class UsersController {
   getAll() {
     return this.UsersProfileService.getHello();
   }
-  
+
+  @Get('getUserByID')
+  getById(@Query('id') id: string) {
+    return this.UsersProfileService.findById(id);
+  }
+
   @UsePipes(ValidationPipe)
   @Post('adduser')
   @UseInterceptors(FilesInterceptor('ImageFile'))
@@ -56,10 +61,10 @@ export class UsersController {
     let userUpdated = await this.UsersProfileService.updateProfile(
       id,
       updateUser,
-      file
+      file,
     );
     if (userUpdated != null) {
-      return `Update updateUser successful : ${userUpdated[0].id}`;
+      return `Update updateUser successful : ${userUpdated._id}`;
     }
     return `Have some error`;
   }
