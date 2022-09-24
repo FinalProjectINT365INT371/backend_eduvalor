@@ -14,6 +14,7 @@ import { CreateUserProfile } from './dto/profile.dto';
 import { Logger } from 'winston';
 import { UploadService } from 'src/Upload/upload.service';
 import bcrypt from 'bcrypt';
+import { UpdateUserProfile } from './dto/updateProfile.dto';
 @Injectable()
 export class UsersProfileService {
   constructor(
@@ -149,6 +150,83 @@ export class UsersProfileService {
     return createdUser;
   }
 
+  async updateProfile(
+    id,
+    updateUserProfile: UpdateUserProfile,
+    @UploadedFiles() file: Array<Express.Multer.File>,
+  ): Promise<UserProfile> {
+    let user = await this.UserProfileModel.findOne({
+      _id: id,
+      DeleteFlag: false,
+    }).exec();
+    this.logger.debug(`Function : Update User - ${id}`);
+    if (user == null) {
+      let res = "This user doesn't exist";
+      this.logger.error(res);
+      //this.logger.debug(this.EOF);
+      throw new NotFoundException(res);
+    }
+
+    await this.uploadService.removeImageS3(
+      'eduvalor-users',
+      user.ImageUrl.toString(),
+    );
+    if (typeof file !== 'undefined') {
+      if (file.length > 0) {
+        file.forEach((image, index) => {
+          if (index == 0) {
+            let imageName = user.id + '_' + 'PF';
+            let fileName = user.id + '/' + imageName + '.png';
+            this.uploadService.uploadFile(image, 'eduvalor-users', fileName);
+            user.ImageUrl = user.id + '/' + imageName + '.png';
+          }
+        });
+      }
+    }
+    await user.updateOne(updateUserProfile).exec();
+    user.UpdateDate = new Date().toLocaleString();
+    try {
+      await user.save();
+    } catch (error) {
+      let res = "Can't update user";
+      this.logger.error(res);
+      //this.logger.debug(this.EOF);
+      throw new HttpException(res, 503);
+    }
+    let updatedUser = await this.UserProfileModel.findOne({
+      _id: id,
+      DeleteFlag: false,
+    }).exec();
+    this.logger.info(updatedUser);
+    //this.logger.debug(this.EOF);
+    return updatedUser;
+  }
+
+  async removeProfileById(id) {
+    this.logger.debug(`Function : Remove User - ${id}`);
+    const user = await this.UserProfileModel.findOne({
+      _id: id,
+      DeleteFlag: false,
+    }).exec();
+    if (user == null) {
+      let res = "This user doesn't exist or aleady removed";
+      this.logger.error(res);
+      //this.logger.debug(this.EOF);
+      throw new NotFoundException(res);
+    }
+    user.DeleteFlag = true;
+    user.UpdateDate = new Date().toLocaleString();
+    try {
+      await user.save();
+    } catch (error) {
+      let res = "Can't remove user";
+      this.logger.error(res);
+      //this.logger.debug(this.EOF);
+      throw new HttpException(res, 503);
+    }
+    //this.logger.debug(this.EOF);
+    return await this.UserProfileModel.find({ _id: id }).exec();
+  }
   async generateNewId() {
     let lastUser = await this.UserProfileModel.find()
       .sort({ $natural: -1 })
