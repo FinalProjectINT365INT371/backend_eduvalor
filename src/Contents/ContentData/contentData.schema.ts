@@ -6,6 +6,7 @@ export interface ContentData extends Document {
   Header: string;
   TextData: [String];
   ContentCategory: [String];
+  Coordinate: [string];
   ImageUrl:[String];
   CreateBy: string;
   CreateDate: string;
@@ -19,6 +20,7 @@ export const ContentDataSchema = new mongoose.Schema({
   TextData: [String],
   ContentCategory:  [String],
   ImageUrl:[String],
+  Coordinate: [String],
   CreateBy: String,
   CreateDate: String,
   UpdateDate: String,
