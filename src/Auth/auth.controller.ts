@@ -91,4 +91,10 @@ export class AuthController {
       userApp: user,
     };
   }
+
+
+  @Get('sendEmail')
+  public sendEmail(@Request() req): any {
+    return this.authService.sendEmailToUser(req.username);
+  }
 }

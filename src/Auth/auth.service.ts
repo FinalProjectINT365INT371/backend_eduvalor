@@ -49,4 +49,36 @@ export class AuthService {
 
     return access_token;
   }
+
+  async sendEmailToUser(username: string): Promise<any> {
+    var nodemailer = require('nodemailer');
+    const user = await this.userProfileService.findByUsername(username);
+    if (user.Email != null) {
+      var transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      var mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: 'worawit.4516@mail.kmutt.ac.th',
+        //to: user.Email,
+        subject: 'Sending Email using Node.js',
+        text: 'That was easy!',
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+    }
+  }
 }
