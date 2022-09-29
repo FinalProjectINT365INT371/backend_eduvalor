@@ -55,8 +55,15 @@ export class ContentService {
       let textdata = content.TextData[0];
       let imageList = await this.getImageInContent(content.id);
       content.TextData[0] = await this.replceImageUrl(textdata, imageList);
+      for (let index = 0; index < content.Comment.length; index++) {
+        const comment = content.Comment[index];
+        if (comment.DeleteFlag == true) {
+          content.Comment.splice(index, 1);
+        }
+      }
       contentList.push(content);
     }
+
     this.logger.info(contentList);
     //this.logger.debug(this.EOF);
     return contentList;
@@ -72,6 +79,12 @@ export class ContentService {
       let textdata = content.TextData[0];
       let imageList = await this.getImageInContent(id);
       content.TextData[0] = await this.replceImageUrl(textdata, imageList);
+      for (let index = 0; index < content.Comment.length; index++) {
+        const comment = content.Comment[index];
+        if (comment.DeleteFlag == true) {
+          content.Comment.splice(index, 1);
+        }
+      }
       this.logger.info(content);
       //this.logger.debug(this.EOF);
       return content;

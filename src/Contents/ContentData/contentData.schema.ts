@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
+import { CommentData } from '../Comment/comment.schama';
 
 export interface ContentData extends Document {
   _id: Object;
@@ -8,6 +9,7 @@ export interface ContentData extends Document {
   ContentCategory: [String];
   Coordinate: [string];
   ImageUrl:[String];
+  Comment:[CommentData];
   CreateBy: string;
   CreateDate: string;
   UpdateDate: string;
@@ -21,6 +23,7 @@ export const ContentDataSchema = new mongoose.Schema({
   ContentCategory:  [String],
   ImageUrl:[String],
   Coordinate: [String],
+  Comment:[Object],
   CreateBy: String,
   CreateDate: String,
   UpdateDate: String,

@@ -93,8 +93,8 @@ export class AuthController {
   }
 
 
-  @Get('sendEmail')
-  public sendEmail(@Request() req): any {
-    return this.authService.sendEmailToUser(req.username);
-  }
+  // @Get('sendEmail')
+  // public sendEmail(@Request() req): any {
+  //   return this.authService.sendEmailToUser(req.username);
+  // }
 }

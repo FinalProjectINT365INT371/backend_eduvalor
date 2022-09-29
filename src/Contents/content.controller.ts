@@ -140,3 +140,4 @@ export class ContentController {
     return `Have some error`;
   }
 }
+
