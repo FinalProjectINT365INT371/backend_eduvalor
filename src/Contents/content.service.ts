@@ -14,6 +14,7 @@ import { UploadService } from 'src/Upload/upload.service';
 import { Logger } from 'winston';
 import { SearchService } from './search.service';
 import { UpdateContent } from './ContentData/dto/updateContent.dto';
+
 @Injectable()
 export class ContentService {
   constructor(
@@ -78,13 +79,25 @@ export class ContentService {
     if (content != null) {
       let textdata = content.TextData[0];
       let imageList = await this.getImageInContent(id);
+      let commentFilter = [];
       content.TextData[0] = await this.replceImageUrl(textdata, imageList);
       for (let index = 0; index < content.Comment.length; index++) {
-        const comment = content.Comment[index];
-        if (comment.DeleteFlag == true) {
-          content.Comment.splice(index, 1);
+        let comment = content.Comment[index];
+        if (comment.DeleteFlag == false) {
+          commentFilter.push(comment);
         }
       }
+
+      while (content.Comment.length > 0) {
+        content.Comment.pop();
+      }
+
+      for (const comment of commentFilter) {
+        content.Comment.push(comment);
+      }
+      //content.Comment.concat(commentFilter);
+      console.log(content.Comment);
+
       this.logger.info(content);
       //this.logger.debug(this.EOF);
       return content;
