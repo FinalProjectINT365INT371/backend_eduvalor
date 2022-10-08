@@ -1,8 +1,3 @@
-  /*ทำ เส้น สำหรับ comment โดน รุ้ว่าใครคอมเน้นอะไร ที่คอนเท้นอะไร */
-  /*เก้บข้อมูลที่ content กับ table ใหม่ โดยใส่่ user กับ comment กับ content*/
-
-  /*Share : coppies link, facebook, twitter*/
-
   import {
     Body,
     Controller,
