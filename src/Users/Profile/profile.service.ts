@@ -110,6 +110,9 @@ export class UsersProfileService {
     CreateUserProfile: CreateUserProfile,
     @UploadedFiles() file: Array<Express.Multer.File>,
   ): Promise<UserProfile> {
+    // เช็ค username valid or not to create
+
+    
     const bcrypt = require('bcrypt');
     const createdUser = new this.UserProfileModel(CreateUserProfile);
     const genId = await this.generateNewId();

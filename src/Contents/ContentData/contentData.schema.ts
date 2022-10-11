@@ -7,7 +7,7 @@ export interface ContentData extends Document {
   Header: string;
   TextData: [String];
   ContentCategory: [String];
-  Coordinate: [string];
+  Coordinate: [Object];
   ImageUrl:[String];
   Comment:[CommentData];
   ApproveData:[ContentApproving];
@@ -23,7 +23,7 @@ export const ContentDataSchema = new mongoose.Schema({
   TextData: [String],
   ContentCategory:  [String],
   ImageUrl:[String],
-  Coordinate: [String],
+  Coordinate: [Object],
   Comment:[Object],
   ApproveData:[Object],
   CreateBy: String,

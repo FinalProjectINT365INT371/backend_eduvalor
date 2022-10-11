@@ -18,7 +18,7 @@ export class UpdateContent {
   readonly ContentCategory: [string];
 
   @IsArray()
-  readonly Coordinate: [string];
+  readonly Coordinate: [object];
   // @IsString()
   // @IsArray()
   // readonly ImageUrl:[String];

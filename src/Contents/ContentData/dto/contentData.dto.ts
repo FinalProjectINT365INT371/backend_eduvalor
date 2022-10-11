@@ -31,5 +31,5 @@ export class CreateContent {
   // readonly DeleteFlag: string;
 
   @IsArray()
-  readonly Coordinate: [string];
+  readonly Coordinate: [object];
 }
