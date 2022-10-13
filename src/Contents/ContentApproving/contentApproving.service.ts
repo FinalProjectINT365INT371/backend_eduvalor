@@ -171,17 +171,38 @@ export class ContentApprovingService {
     this.logger.info(contentApprovedToDelete);
     return contentApprovedToDelete;
   }
+  // async generateNewId(content: ContentData) {
+  //   let genId = '';
+  //   if (!content.ApproveData.length) {
+  //     genId = content.id + '_CP_' + 1;
+  //     return genId;
+  //   }
+  //   let index = content.ApproveData.length - 1;
+  //   let lastId = parseInt(
+  //     content.ApproveData[index]._id.toString().split('_CM_')[1],
+  //   );
+  //   genId = content.id + '_CP_' + (lastId + 1);
+  //   return genId;
+  // }
+
   async generateNewId(content: ContentData) {
-    let genId = '';
-    if (!content.ApproveData.length) {
-      genId = content.id + '_CP_' + 1;
-      return genId;
+    let lastId = Math.round(100000000 + Math.random() * 900000000);
+    let genId = content.id + '_CP_'  + (lastId + 1);
+    let contentApproveCheck = await this.ContentApprovingModel.findOne({
+      _id: genId,
+      DeleteFlag: false,
+    }).exec();
+
+    if (contentApproveCheck != null) {
+      do {
+        lastId = Math.round(100000 + Math.random() * 900000);
+        genId = content.id + '_CM_' + (lastId + 1);
+        contentApproveCheck = await this.ContentApprovingModel.findOne({
+          _id: genId,
+          DeleteFlag: false,
+        }).exec();
+      } while (contentApproveCheck == null);
     }
-    let index = content.ApproveData.length - 1;
-    let lastId = parseInt(
-      content.ApproveData[index]._id.toString().split('_CM_')[1],
-    );
-    genId = content.id + '_CP_' + (lastId + 1);
     return genId;
   }
 }

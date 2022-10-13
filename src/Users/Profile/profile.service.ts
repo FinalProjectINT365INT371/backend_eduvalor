@@ -3,6 +3,7 @@ import {
   HttpException,
   Inject,
   Injectable,
+  NotAcceptableException,
   NotFoundException,
   UploadedFile,
   UploadedFiles,
@@ -10,7 +11,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { UserProfile } from './profile.schema';
 import { Model } from 'mongoose';
-import { CreateUserProfile } from './dto/profile.dto';
+import { CreateUserProfile, ResponseUserProfile } from './dto/profile.dto';
 import { Logger } from 'winston';
 import { UploadService } from 'src/Upload/upload.service';
 import bcrypt from 'bcrypt';
@@ -109,10 +110,15 @@ export class UsersProfileService {
   async create(
     CreateUserProfile: CreateUserProfile,
     @UploadedFiles() file: Array<Express.Multer.File>,
-  ): Promise<UserProfile> {
-    // เช็ค username valid or not to create
+  ): Promise<ResponseUserProfile> {
+    let userProfile = await this.UserProfileModel.findOne({
+      Username: CreateUserProfile.Username,
+      DeleteFlag: false,
+    }).exec();
+    if (userProfile != null) {
+      throw new NotAcceptableException('This username is already exist');
+    }
 
-    
     const bcrypt = require('bcrypt');
     const createdUser = new this.UserProfileModel(CreateUserProfile);
     const genId = await this.generateNewId();
@@ -130,6 +136,7 @@ export class UsersProfileService {
     }
     createdUser.CreateDate = new Date().toLocaleString();
     createdUser.UpdateDate = new Date().toLocaleString();
+    createdUser.DeleteFlag = false;
     if (file.length > 0) {
       file.forEach((image, index) => {
         if (index == 0) {
@@ -150,7 +157,7 @@ export class UsersProfileService {
     }
     this.logger.info(createdUser);
     //this.logger.debug(this.EOF);
-    return createdUser;
+    return this.setResUserProfiles(createdUser);
   }
 
   async updateProfile(
@@ -169,12 +176,9 @@ export class UsersProfileService {
       //this.logger.debug(this.EOF);
       throw new NotFoundException(res);
     }
-    
-    console.log( user.ImageUrl);
-    await this.uploadService.removeImageS3(
-      user.ImageUrl,
-      'eduvalor-users',
-    );
+
+    console.log(user.ImageUrl);
+    await this.uploadService.removeImageS3(user.ImageUrl, 'eduvalor-users');
     if (typeof file !== 'undefined') {
       if (file.length > 0) {
         file.forEach((image, index) => {
@@ -231,12 +235,47 @@ export class UsersProfileService {
     //this.logger.debug(this.EOF);
     return await this.UserProfileModel.find({ _id: id }).exec();
   }
+  // async generateNewId() {
+  //   let lastUser = await this.UserProfileModel.find()
+  //     .sort({ $natural: -1 })
+  //     .limit(1);
+  //   let lastId = parseInt(lastUser[0]._id.toString().split('_')[1]);
+  //   let genId = 'U_' + (lastId + 1);
+  //   return genId;
+  // }
+
   async generateNewId() {
-    let lastUser = await this.UserProfileModel.find()
-      .sort({ $natural: -1 })
-      .limit(1);
-    let lastId = parseInt(lastUser[0]._id.toString().split('_')[1]);
+    let lastId = Math.round(100000 + Math.random() * 900000);
     let genId = 'U_' + (lastId + 1);
+    let userProfile = await this.UserProfileModel.findOne({
+      _id: genId,
+      DeleteFlag: false,
+    }).exec();
+
+    if (userProfile != null) {
+      do {
+        lastId = Math.round(100000 + Math.random() * 900000);
+        genId = 'U_' + (lastId + 1);
+        userProfile = await this.UserProfileModel.findOne({
+          _id: genId,
+          DeleteFlag: false,
+        }).exec();
+      } while (userProfile == null);
+    }
     return genId;
+  }
+
+  async setResUserProfiles(profile: UserProfile) {
+    let resProfile = new ResponseUserProfile();
+    resProfile.id = profile.id;
+    resProfile.Username = profile.Username;
+    resProfile.Firstname = profile.Firstname;
+    resProfile.Lastname = profile.Lastname;
+    resProfile.Role = profile.Role;
+    resProfile.Tel = profile.Tel;
+    resProfile.Email = profile.Email;
+    resProfile.Address = profile.Address;
+    resProfile.BirthDate = profile.BirthDate;
+    return resProfile;
   }
 }

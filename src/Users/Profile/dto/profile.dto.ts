@@ -54,3 +54,16 @@ export class CreateUserProfile {
   @IsBoolean()
   GoogleAccess?: boolean;
 }
+
+export class ResponseUserProfile {
+  id:string;
+  Username: string;
+  Firstname: string;
+  Lastname: string;
+  Email: string;
+  Tel: string;
+  Address: string;
+  BirthDate: string;
+  Role: string;
+}
+

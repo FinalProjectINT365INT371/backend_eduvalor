@@ -24,14 +24,10 @@ import { UpdateUserProfile } from './Profile/dto/updateProfile.dto';
 export class UsersController {
   constructor(private readonly UsersProfileService: UsersProfileService) {}
 
-  @Get()
-  getAll() {
-    return this.UsersProfileService.getHello();
-  }
-
   @Get('getUserByID')
-  getById(@Query('id') id: string) {
-    return this.UsersProfileService.findById(id);
+  async getById(@Query('id') id: string) {
+    let user = await this.UsersProfileService.findById(id);
+    return this.UsersProfileService.setResUserProfiles(user);
   }
 
   @UsePipes(ValidationPipe)
@@ -41,13 +37,15 @@ export class UsersController {
     @UploadedFiles() file: Array<Express.Multer.File>,
     @Body() createUser: CreateUserProfile,
   ) {
-    console.log(file);
-    console.log(createUser);
-    let userCreated = await this.UsersProfileService.create(createUser, file);
-    if (userCreated != null) {
-      return `Save new user successful : ${userCreated.id}`;
+    try {
+      let userCreated = await this.UsersProfileService.create(createUser, file);
+      if (userCreated != null) {
+        return `Save new user successful : ${userCreated.id}`;
+      }
+    } catch (exception) {
+      console.log(exception);
+      return `Have some error : ${exception}`;
     }
-    return `Have some error`;
   }
 
   @UsePipes(ValidationPipe)
@@ -58,15 +56,18 @@ export class UsersController {
     @Body() updateUser: UpdateUserProfile,
     @UploadedFiles() file: Array<Express.Multer.File>,
   ) {
-    let userUpdated = await this.UsersProfileService.updateProfile(
-      id,
-      updateUser,
-      file,
-    );
-    if (userUpdated != null) {
-      return `Update updateUser successful : ${userUpdated._id}`;
+    try {
+      let userUpdated = await this.UsersProfileService.updateProfile(
+        id,
+        updateUser,
+        file,
+      );
+      if (userUpdated != null) {
+        return `Update updateUser successful : ${userUpdated._id}`;
+      }
+    } catch (exception) {
+      return `Have some error : ${exception}`;
     }
-    return `Have some error`;
   }
 
   @Delete('deleteuser')

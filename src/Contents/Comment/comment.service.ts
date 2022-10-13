@@ -152,17 +152,38 @@ export class CommentService {
     this.logger.info(commentToDelete);
     return commentToDelete;
   }
+  // async generateNewId(content: ContentData) {
+  //   let genId = '';
+  //   if (!content.Comment.length) {
+  //     genId = content.id + '_CM_' + 1;
+  //     return genId;
+  //   }
+  //   let index = content.Comment.length - 1;
+  //   let lastId = parseInt(
+  //     content.Comment[index]._id.toString().split('_CM_')[1],
+  //   );
+  //   genId = content.id + '_CM_' + (lastId + 1);
+  //   return genId;
+  // }
+
   async generateNewId(content: ContentData) {
-    let genId = '';
-    if (!content.Comment.length) {
-      genId = content.id + '_CM_' + 1;
-      return genId;
+    let lastId = Math.round(100000000 + Math.random() * 900000000);
+    let genId = content.id + '_CM_'  + (lastId + 1);
+    let commentCheck = await this.CommentModel.findOne({
+      _id: genId,
+      DeleteFlag: false,
+    }).exec();
+
+    if (commentCheck != null) {
+      do {
+        lastId = Math.round(100000 + Math.random() * 900000);
+        genId = content.id + '_CM_' + (lastId + 1);
+        commentCheck = await this.CommentModel.findOne({
+          _id: genId,
+          DeleteFlag: false,
+        }).exec();
+      } while (commentCheck == null);
     }
-    let index = content.Comment.length - 1;
-    let lastId = parseInt(
-      content.Comment[index]._id.toString().split('_CM_')[1],
-    );
-    genId = content.id + '_CM_' + (lastId + 1);
     return genId;
   }
 }

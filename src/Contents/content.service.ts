@@ -265,12 +265,33 @@ export class ContentService {
     return await this.ContentModel.find({ _id: id }).exec();
   }
 
+  // async generateNewId() {
+  //   let lastContent = await this.ContentModel.find()
+  //     .sort({ $natural: -1 })
+  //     .limit(1);
+  //   let lastId = parseInt(lastContent[0]._id.toString().split('_')[1]);
+  //   let genId = 'CT_' + (lastId + 1);
+  //   return genId;
+  // }
+
   async generateNewId() {
-    let lastContent = await this.ContentModel.find()
-      .sort({ $natural: -1 })
-      .limit(1);
-    let lastId = parseInt(lastContent[0]._id.toString().split('_')[1]);
+    let lastId = Math.round(100000 + Math.random() * 900000);
     let genId = 'CT_' + (lastId + 1);
+    let content = await this.ContentModel.findOne({
+      _id: genId,
+      DeleteFlag: false,
+    }).exec();
+
+    if (content != null) {
+      do {
+        lastId = Math.round(100000 + Math.random() * 900000);
+        genId = 'CT_' + (lastId + 1);
+        content = await this.ContentModel.findOne({
+          _id: genId,
+          DeleteFlag: false,
+        }).exec();
+      } while (content == null);
+    }
     return genId;
   }
 
