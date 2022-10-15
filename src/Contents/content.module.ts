@@ -11,17 +11,20 @@ import { CommentController } from './Comment/comment.controller';
 import { ContentApprovingSchema } from './ContentApproving/contentApproving.schema';
 import { ApproveContentController } from './ContentApproving/contentApproving.controller';
 import { ContentApprovingService } from './ContentApproving/contentApproving.service';
+import { ShareLogSchema } from './Share/share.schema';
+import { ShareService } from './Share/share.service';
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'contentData', schema: ContentDataSchema },
       { name: 'comment', schema: CommentSchema },
       { name: 'contentApproving', schema: ContentApprovingSchema },
+      { name: 'shareLog', schema: ShareLogSchema },
     ]),
     UploadModule,
   ],
   controllers: [ContentController,CommentController,ApproveContentController],
-  providers: [ContentService, SearchService, CommentService, ContentApprovingService],
-  exports: [ContentService, SearchService, CommentService, ContentApprovingService],
+  providers: [ContentService, SearchService, CommentService, ContentApprovingService, ShareService],
+  exports: [ContentService, SearchService, CommentService, ContentApprovingService, ShareService],
 })
 export class ContentModule {}

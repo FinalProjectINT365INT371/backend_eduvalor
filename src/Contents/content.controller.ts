@@ -21,11 +21,14 @@ import { FileInterceptor, FilesInterceptor,FileFieldsInterceptor } from '@nestjs
 import { SearchService } from './search.service';
 import { ValidationPipe } from '../validation.pipe';
 import { UpdateContent } from './ContentData/dto/updateContent.dto';
+import { ShareService } from './Share/share.service';
+import { CreateShareLog } from './Share/share.dto';
 @Controller('content')
 export class ContentController {
   constructor(
     private readonly contentService: ContentService,
     private readonly searchService: SearchService,
+    private readonly shareService: ShareService,
   ) {}
 
   //Search Service
@@ -136,6 +139,17 @@ export class ContentController {
     let contentremoved = await this.contentService.removeById(id);
     if (contentremoved != null) {
       return `Update content successful : ${contentremoved[0].id}`;
+    }
+    return `Have some error`;
+  }
+
+  @Post('shareLog')
+  async addShareLog(@Body() createShareLog: CreateShareLog) {
+    let shareLogCreated = await this.shareService.addShareLog(
+      createShareLog,
+    );
+    if (shareLogCreated != null) {
+      return `Save new log successful : ${shareLogCreated.id}`;
     }
     return `Have some error`;
   }
