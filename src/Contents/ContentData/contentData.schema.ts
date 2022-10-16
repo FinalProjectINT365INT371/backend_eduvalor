@@ -11,6 +11,8 @@ export interface ContentData extends Document {
   ImageUrl:[String];
   Comment:[CommentData];
   ApproveData:[ContentApproving];
+  Share:number;
+  View:number;
   CreateBy: string;
   CreateDate: string;
   UpdateDate: string;
@@ -26,6 +28,8 @@ export const ContentDataSchema = new mongoose.Schema({
   Coordinate: [Object],
   Comment:[Object],
   ApproveData:[Object],
+  Share:Number,
+  View:Number,
   CreateBy: String,
   CreateDate: String,
   UpdateDate: String,

@@ -132,6 +132,8 @@ export class ContentService {
     createdContent.CreateDate = new Date().toLocaleString();
     createdContent.UpdateDate = new Date().toLocaleString();
     createdContent.DeleteFlag = false;
+    createdContent.Share = 0;
+    createdContent.View = 0;
     if (typeof file !== 'undefined') {
       if (file.length > 0) {
         file.forEach((image, index) => {

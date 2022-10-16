@@ -37,6 +37,7 @@ export class ShareService {
       throw new NotFoundException("This content doesn't exist");
     }
 
+    contents.Share = contents.Share + 1;
     const genId = await this.generateNewId(contents);
     this.logger.debug(`Function : Create Share Log - ${genId}`);
     if (shareLog.Platform == null) {
@@ -52,6 +53,7 @@ export class ShareService {
 
     try {
       await shareLog.save();
+      await contents.save();
     } catch (error) {
       let res = "Can't save new log";
       this.logger.error(res);

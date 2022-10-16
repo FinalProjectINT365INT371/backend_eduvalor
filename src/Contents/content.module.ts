@@ -13,6 +13,7 @@ import { ApproveContentController } from './ContentApproving/contentApproving.co
 import { ContentApprovingService } from './ContentApproving/contentApproving.service';
 import { ShareLogSchema } from './Share/share.schema';
 import { ShareService } from './Share/share.service';
+import { UsersModule } from 'src/Users/users.module';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -21,7 +22,7 @@ import { ShareService } from './Share/share.service';
       { name: 'contentApproving', schema: ContentApprovingSchema },
       { name: 'shareLog', schema: ShareLogSchema },
     ]),
-    UploadModule,
+    UploadModule, UsersModule
   ],
   controllers: [ContentController,CommentController,ApproveContentController],
   providers: [ContentService, SearchService, CommentService, ContentApprovingService, ShareService],

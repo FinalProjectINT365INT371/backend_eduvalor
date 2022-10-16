@@ -13,6 +13,7 @@ export interface UserProfile extends Document {
   BirthDate: string;
   Role: string;
   ImageUrl: string;
+  ContentCreated:[string]
   CreateBy: string;
   CreateDate: string;
   UpdateDate: string;
@@ -33,6 +34,7 @@ export const UserProfileSchema = new mongoose.Schema({
   BirthDate: String,
   Role: String,
   ImageUrl: String,
+  ContentCreated: [String],
   CreateBy: String,
   CreateDate: String,
   UpdateDate: String,

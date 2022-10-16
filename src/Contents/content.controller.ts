@@ -9,8 +9,10 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UploadedFile,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
@@ -23,12 +25,18 @@ import { ValidationPipe } from '../validation.pipe';
 import { UpdateContent } from './ContentData/dto/updateContent.dto';
 import { ShareService } from './Share/share.service';
 import { CreateShareLog } from './Share/share.dto';
+import { UsersProfileService } from 'src/Users/Profile/profile.service';
+import { Roles } from 'src/Authorization/roles.decorator';
+import { ROLES } from 'src/Authorization/ROLES';
+import { RolesGuard } from 'src/Authorization/roles.guard';
+import { JwtAuthGuard } from 'src/Auth/guard/jwt-auth.guard';
 @Controller('content')
 export class ContentController {
   constructor(
     private readonly contentService: ContentService,
     private readonly searchService: SearchService,
     private readonly shareService: ShareService,
+    private readonly usersProfileService: UsersProfileService
   ) {}
 
   //Search Service
@@ -74,8 +82,11 @@ export class ContentController {
   }
 
   @Get('getContentByID')
-  getById(@Query('id') id: string) {
-    return this.contentService.findById(id);
+  async getById(@Query('id') id: string) {
+    let content = await this.contentService.findById(id);
+    content.View = content.View + 1;
+    content.save()
+    return content
   }
   //Search Service
 
@@ -88,6 +99,9 @@ export class ContentController {
   async getImageInContent(@Query('ContentId') id: string) {
     return await this.contentService.getImageInContent(id);
   }
+
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATER)
   @UsePipes(ValidationPipe)
   @Post('addcontent')
   @UseInterceptors(FileFieldsInterceptor([
@@ -96,17 +110,20 @@ export class ContentController {
   ]))
   
   async create(
+    @Req() req,
     @UploadedFiles() files: { ImageFiles?: Array<Express.Multer.File>, ImageCover?: Array<Express.Multer.File> },
     @Body() createContent: CreateContent,
   ) {
-    console.log(files);
-    console.log(createContent);
     let contentCreated = await this.contentService.create(
       createContent,
       files.ImageFiles,
       files.ImageCover,
     );
     if (contentCreated != null) {
+      console.log(req.user); 
+      let user = await this.usersProfileService.findById(req.user.user_id);
+      user.ContentCreated.push(contentCreated.id);
+      user.save();
       return `Save new content successful : ${contentCreated.id}`;
     }
     return `Have some error`;
