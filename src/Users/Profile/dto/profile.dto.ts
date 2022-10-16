@@ -65,5 +65,7 @@ export class ResponseUserProfile {
   Address: string;
   BirthDate: string;
   Role: string;
+  ImageUrl: string;
+  ContentCreated: [string];
 }
 

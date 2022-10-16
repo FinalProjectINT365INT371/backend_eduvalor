@@ -276,6 +276,8 @@ export class UsersProfileService {
     resProfile.Email = profile.Email;
     resProfile.Address = profile.Address;
     resProfile.BirthDate = profile.BirthDate;
+    resProfile.ImageUrl = profile.ImageUrl;
+    resProfile.ContentCreated = profile.ContentCreated;
     return resProfile;
   }
 }
