@@ -19,7 +19,11 @@ import {
 import { CreateContent } from './ContentData/dto/contentData.dto';
 import { ContentService } from './content.service';
 import { query } from 'express';
-import { FileInterceptor, FilesInterceptor,FileFieldsInterceptor } from '@nestjs/platform-express';
+import {
+  FileInterceptor,
+  FilesInterceptor,
+  FileFieldsInterceptor,
+} from '@nestjs/platform-express';
 import { SearchService } from './search.service';
 import { ValidationPipe } from '../validation.pipe';
 import { UpdateContent } from './ContentData/dto/updateContent.dto';
@@ -36,7 +40,7 @@ export class ContentController {
     private readonly contentService: ContentService,
     private readonly searchService: SearchService,
     private readonly shareService: ShareService,
-    private readonly usersProfileService: UsersProfileService
+    private readonly usersProfileService: UsersProfileService,
   ) {}
 
   //Search Service
@@ -85,8 +89,8 @@ export class ContentController {
   async getById(@Query('id') id: string) {
     let content = await this.contentService.findById(id);
     content.View = content.View + 1;
-    content.save()
-    return content
+    content.save();
+    return content;
   }
   //Search Service
 
@@ -101,17 +105,22 @@ export class ContentController {
   }
 
   // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATER)
+  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Post('addcontent')
-  @UseInterceptors(FileFieldsInterceptor([
-    { name: 'ImageFiles' },
-    { name: 'ImageCover', maxCount: 1 },
-  ]))
-  
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'ImageFiles' },
+      { name: 'ImageCover', maxCount: 1 },
+    ]),
+  )
   async create(
     @Req() req,
-    @UploadedFiles() files: { ImageFiles?: Array<Express.Multer.File>, ImageCover?: Array<Express.Multer.File> },
+    @UploadedFiles()
+    files: {
+      ImageFiles?: Array<Express.Multer.File>;
+      ImageCover?: Array<Express.Multer.File>;
+    },
     @Body() createContent: CreateContent,
   ) {
     let contentCreated = await this.contentService.create(
@@ -120,7 +129,7 @@ export class ContentController {
       files.ImageCover,
     );
     if (contentCreated != null) {
-      console.log(req.user); 
+      console.log(req.user);
       let user = await this.usersProfileService.findById(req.user.user_id);
       user.ContentCreated.push(contentCreated.id);
       user.save();
@@ -128,16 +137,25 @@ export class ContentController {
     }
     return `Have some error`;
   }
+
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Put('editcontent')
-  @UseInterceptors(FileFieldsInterceptor([
-    { name: 'ImageFiles' },
-    { name: 'ImageCover', maxCount: 1 },
-  ]))
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'ImageFiles' },
+      { name: 'ImageCover', maxCount: 1 },
+    ]),
+  )
   async edit(
     @Query('id') id: string,
     @Body() updateContent: UpdateContent,
-    @UploadedFiles() files: { ImageFiles?: Array<Express.Multer.File>, ImageCover?: Array<Express.Multer.File> },
+    @UploadedFiles()
+    files: {
+      ImageFiles?: Array<Express.Multer.File>;
+      ImageCover?: Array<Express.Multer.File>;
+    },
   ) {
     let contentUpdated = await this.contentService.updateContent(
       id,
@@ -151,6 +169,8 @@ export class ContentController {
     return `Have some error`;
   }
 
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @Delete('deletecontent')
   async delete(@Query('id') id: string) {
     let contentremoved = await this.contentService.removeById(id);
@@ -162,13 +182,10 @@ export class ContentController {
 
   @Post('shareLog')
   async addShareLog(@Body() createShareLog: CreateShareLog) {
-    let shareLogCreated = await this.shareService.addShareLog(
-      createShareLog,
-    );
+    let shareLogCreated = await this.shareService.addShareLog(createShareLog);
     if (shareLogCreated != null) {
       return `Save new log successful : ${shareLogCreated.id}`;
     }
     return `Have some error`;
   }
 }
-

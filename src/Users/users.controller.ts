@@ -12,6 +12,7 @@ import {
   UploadedFiles,
   UseInterceptors,
   UsePipes,
+  UseGuards,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { UsersProfileService } from './Profile/profile.service';
@@ -19,11 +20,17 @@ import { CreateUserProfile } from './Profile/dto/profile.dto';
 import { ValidationPipe } from 'src/validation.pipe';
 import { UpdateContent } from 'src/Contents/ContentData/dto/updateContent.dto';
 import { UpdateUserProfile } from './Profile/dto/updateProfile.dto';
+import { Roles } from 'src/Authorization/roles.decorator';
+import { ROLES } from 'src/Authorization/ROLES';
+import { RolesGuard } from 'src/Authorization/roles.guard';
+import { JwtAuthGuard } from 'src/Auth/guard/jwt-auth.guard';
 
 @Controller('user')
 export class UsersController {
   constructor(private readonly UsersProfileService: UsersProfileService) {}
 
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @Get('getUserByID')
   async getById(@Query('id') id: string) {
     let user = await this.UsersProfileService.findById(id);
@@ -48,6 +55,8 @@ export class UsersController {
     }
   }
 
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Put('edituser')
   @UseInterceptors(FilesInterceptor('ImageFile'))
@@ -70,6 +79,8 @@ export class UsersController {
     }
   }
 
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @Delete('deleteuser')
   async delete(@Query('id') id: string) {
     let userRemoved = await this.UsersProfileService.removeProfileById(id);
