@@ -15,12 +15,31 @@ export interface ContentApproving extends Document {
 
 export const ContentApprovingSchema = new mongoose.Schema({
   _id: Object,
-  UserId: String,
-  ContentId: String,
-  Comment: String,
+  UserId: {
+    type: String,
+    required: [true, 'Must have User Id'],
+  },
+  ContentId: {
+    type: String,
+    required: [true, 'Must have Content Id'],
+  },
+  Comment: {
+    type: String,
+    required: [true, 'Must have Comment'],
+  },
   CreateBy: String,
   CreateDate: String,
   UpdateDate: String,
-  DeleteFlag: Boolean,
-  ApproveStatus: String,
+  DeleteFlag: {
+    type: Boolean,
+    required: [true, 'Must have flag'],
+  },
+  ApproveStatus: {
+    type: String,
+    enum: {
+      values: ['PASS'],
+      message: '{VALUE} is not supported'
+    },
+    required: [true, 'Must have Approve Status']
+  },
 });

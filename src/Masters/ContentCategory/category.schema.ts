@@ -12,9 +12,16 @@ export interface ContentCategory extends Document {
 
 export const ContentCategorySchema = new mongoose.Schema({
   _id: Object,
-  CategoryName: String,
+  CategoryName: {
+    type: String,
+    unique: true,
+    required: [true, 'Must have Category Name'],
+  },
   CreateBy: String,
   CreateDate: String,
   UpdateDate: String,
-  DeleteFlag: Boolean,
+  DeleteFlag: {
+    type: Boolean,
+    required: [true, 'Must have flag'],
+  },
 });

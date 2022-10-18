@@ -13,12 +13,28 @@ export interface ShareLog extends Document {
 
 export const ShareLogSchema = new mongoose.Schema({
   _id: Object,
-  ContentId: String,
-  UserId: String,
-  Platform: String,
+  ContentId:{
+    type: String,
+    required: [true, 'Must have Content Id'],
+  },
+  UserId: {
+    type: String,
+    required: [true, 'Must have User Id'],
+  },
+  Platform: {
+    type: String,
+    enum: {
+      values: ['FACEBOOK','LINK','TWITTER'],
+      message: '{VALUE} is not supported'
+    },
+    required: [true, 'Must have Platform']
+  },
   CreateBy: String,
   CreateDate: String,
   UpdateDate: String,
-  DeleteFlag: Boolean,
+  DeleteFlag: {
+    type: Boolean,
+    required: [true, 'Must have flag'],
+  },
 });
 

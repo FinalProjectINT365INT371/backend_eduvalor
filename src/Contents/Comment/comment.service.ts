@@ -52,6 +52,7 @@ export class CommentService {
       await contents.save();
     } catch (error) {
       let res = "Can't save new comment";
+      this.logger.error(error);
       this.logger.error(res);
       //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);

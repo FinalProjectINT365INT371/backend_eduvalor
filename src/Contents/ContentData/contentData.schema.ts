@@ -8,11 +8,11 @@ export interface ContentData extends Document {
   TextData: [String];
   ContentCategory: [String];
   Coordinate: [Object];
-  ImageUrl:[String];
-  Comment:[CommentData];
-  ApproveData:[ContentApproving];
-  Share:number;
-  View:number;
+  ImageUrl: [String];
+  Comment: [CommentData];
+  ApproveData: [ContentApproving];
+  Share: number;
+  View: number;
   CreateBy: string;
   CreateDate: string;
   UpdateDate: string;
@@ -21,18 +21,40 @@ export interface ContentData extends Document {
 
 export const ContentDataSchema = new mongoose.Schema({
   _id: Object,
-  Header: String,
-  TextData: [String],
-  ContentCategory:  [String],
-  ImageUrl:[String],
+  Header: {
+    type: String,
+    required: [true, 'Must have Content Header'],
+  },
+  TextData: {
+    type: [String],
+    required: [true, 'Must have Content Data'],
+  },
+  ContentCategory: {
+    type: [String], //FIll
+    // enum: {
+    //   values: ['FACEBOOK','LINK','TWITTER'],
+    //   message: '{VALUE} is not supported'
+    // },
+    required: [true, 'Must have Content Data'],
+  },
+  ImageUrl: [String],
   Coordinate: [Object],
-  Comment:[Object],
-  ApproveData:[Object],
-  Share:Number,
-  View:Number,
+  Comment: [Object],
+  ApproveData: [Object],
+  Share: {
+    type: Number,
+    default: 0,
+  },
+
+  View: {
+    type: Number,
+    default: 0,
+  },
   CreateBy: String,
   CreateDate: String,
   UpdateDate: String,
-  DeleteFlag: Boolean,
+  DeleteFlag: {
+    type: Boolean,
+    required: [true, 'Must have flag'],
+  },
 });
-

@@ -24,21 +24,43 @@ export interface UserProfile extends Document {
 
 export const UserProfileSchema = new mongoose.Schema({
   _id: Object,
-  Username: String,
-  Password: String,
-  Firstname: String,
-  Lastname: String,
-  Email: String,
+  Username: {
+    type: String,
+    unique: true,
+  },
+  Password: {
+    type: String,
+    unique: true,
+  },
+  Firstname: {
+    type: String,
+    required: [true, 'Must have First name'],
+  },
+  Lastname: {
+    type: String,
+    required: [true, 'Must have Last name'],
+  },
+  Email: String, // NOT sure
   Tel: String,
   Address: String,
   BirthDate: String,
-  Role: String,
+  Role: {
+    type: String,
+    enum: {
+      values: ['Admin','Developer','Content Creator','Guest'],
+      message: '{VALUE} is not supported'
+    },
+    required: [true, 'Must have First name'],
+  },
   ImageUrl: String,
   ContentCreated: [String],
   CreateBy: String,
   CreateDate: String,
   UpdateDate: String,
-  DeleteFlag: Boolean,
+  DeleteFlag: {
+    type: Boolean,
+    required: [true, 'Must have flag'],
+  },
   PSID: String,
   GoogleAccess: Boolean,
 });
