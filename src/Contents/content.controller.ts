@@ -104,9 +104,9 @@ export class ContentController {
     return await this.contentService.getImageInContent(id);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
-  @UsePipes(ValidationPipe)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  // @UsePipes(ValidationPipe)
   @Post('addcontent')
   @UseInterceptors(
     FileFieldsInterceptor([
