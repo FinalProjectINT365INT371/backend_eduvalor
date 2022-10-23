@@ -106,7 +106,7 @@ export class ContentController {
 
   // @UseGuards(JwtAuthGuard, RolesGuard)
   // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
-  // @UsePipes(ValidationPipe)
+  @UsePipes(ValidationPipe)
   @Post('addcontent')
   @UseInterceptors(
     FileFieldsInterceptor([
