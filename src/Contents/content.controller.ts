@@ -88,8 +88,6 @@ export class ContentController {
   @Get('getContentByID')
   async getById(@Query('id') id: string) {
     let content = await this.contentService.findById(id);
-    content.View = content.View + 1;
-    content.save();
     return content;
   }
   //Search Service
