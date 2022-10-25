@@ -331,11 +331,10 @@ export class ContentService {
   async replceImageUrl(text: String, imageUrlList: any[]) {
     let convertText = text;
     imageUrlList.forEach((imageUrl) => {
-      console.log(imageUrl);
+
       let imageName = imageUrl.split(' : ')[0];
-      console.log(imageName);
       let imageurl = imageUrl.split(' : ')[1];
-      console.log(imageurl);
+
       convertText = convertText.replace(imageName, imageurl);
       //console.log(convertText);
     });
