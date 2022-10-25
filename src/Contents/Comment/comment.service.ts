@@ -8,10 +8,12 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { UserProfile } from 'src/Users/Profile/profile.schema';
 import { Logger } from 'winston';
 import { ContentData } from '../ContentData/contentData.schema';
 import { CommentData } from './comment.schama';
 import { CommentContent } from './dto/createComment.dto';
+import { UsersProfileService } from '../../Users/Profile/profile.service';
 import { DeleteComment, UpdateComment } from './dto/updateComment.dto';
 @Injectable()
 export class CommentService {
@@ -20,6 +22,7 @@ export class CommentService {
     private readonly CommentModel: Model<CommentData>,
     @InjectModel('contentData')
     private readonly ContentModel: Model<ContentData>,
+    private readonly UsersProfileService: UsersProfileService,
     @Inject('winston')
     private readonly logger: Logger,
   ) {}
@@ -33,6 +36,11 @@ export class CommentService {
     if (contents == null) {
       throw new NotFoundException("This content doesn't exist");
     }
+
+    let user = await this.UsersProfileService.findById(createComment.UserId);
+    if (contents == null) {
+      throw new NotFoundException("This user doesn't exist");
+    }
     const genId = await this.generateNewId(contents);
     this.logger.debug(`Function : Create Comment - ${genId}`);
     if (createComment.Comment == null) {
@@ -42,6 +50,7 @@ export class CommentService {
       throw new BadRequestException(res);
     }
     createdComment._id = genId;
+    createdComment.Displayname = user.Displayname;
     createdComment.CreateDate = new Date().toLocaleString();
     createdComment.UpdateDate = new Date().toLocaleString();
     createdComment.DeleteFlag = false;

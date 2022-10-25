@@ -76,6 +76,8 @@ export class ContentService {
       _id: id,
       DeleteFlag: false,
     }).exec();
+
+    let contentUpdateView = content;
     if (content != null) {
       let textdata = content.TextData[0];
       let imageList = await this.getImageInContent(id);
@@ -100,7 +102,13 @@ export class ContentService {
 
       this.logger.info(content);
       //this.logger.debug(this.EOF);
+      let view = content.View + 1;
+      let contentUpdateView = await this.ContentModel.findOneAndUpdate(
+        { _id: id, DeleteFlag: false },
+        { $set: { View: view } },
+      ).exec();
       return content;
+      //View update
     } else {
       let res = "This content doesn't exist";
       this.logger.error(res);
@@ -331,7 +339,6 @@ export class ContentService {
   async replceImageUrl(text: String, imageUrlList: any[]) {
     let convertText = text;
     imageUrlList.forEach((imageUrl) => {
-
       let imageName = imageUrl.split(' : ')[0];
       let imageurl = imageUrl.split(' : ')[1];
 
