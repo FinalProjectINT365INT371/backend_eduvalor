@@ -6,6 +6,7 @@ export interface CommentData extends Document {
   UserId: string;
   ContentId: string;
   Comment: string;
+  Displayname:string;
   CreateBy: string;
   CreateDate: string;
   UpdateDate: string;
@@ -17,6 +18,10 @@ export const CommentSchema = new mongoose.Schema({
   UserId: {
     type: String,
     required: [true, 'Must have User Id']
+  },
+  Displayname: {
+    type: String,
+    required: [true, 'Must have Dispalyname']
   },
   ContentId: {
     type: String,

@@ -75,8 +75,7 @@ export class UsersProfileService {
     console.log(findUser);
     if (findUser == null) {
       createUser.Email = req.user.email;
-      createUser.Firstname = req.user.firstName;
-      createUser.Lastname = req.user.lastName;
+      createUser.Displayname = req.user.Displayname;
       createUser.PSID = req.user.psid;
       createUser.DeleteFlag = false;
       createUser.Role = 'ContentCreator';
@@ -95,8 +94,7 @@ export class UsersProfileService {
     console.log(findUser);
     if (findUser == null) {
       createUser.Email = req.user.email;
-      createUser.Firstname = req.user.firstName;
-      createUser.Lastname = req.user.lastName;
+      createUser.Displayname = req.user.Displayname;
       createUser.PSID = '';
       createUser.DeleteFlag = false;
       createUser.Role = 'ContentCreator';
@@ -134,6 +132,7 @@ export class UsersProfileService {
     if (createdUser.GoogleAccess == null) {
       createdUser.GoogleAccess = false;
     }
+    createdUser.Role = 'Content Creator';
     createdUser.CreateDate = new Date().toLocaleString();
     createdUser.UpdateDate = new Date().toLocaleString();
     createdUser.DeleteFlag = false;
@@ -269,8 +268,7 @@ export class UsersProfileService {
     let resProfile = new ResponseUserProfile();
     resProfile.id = profile.id;
     resProfile.Username = profile.Username;
-    resProfile.Firstname = profile.Firstname;
-    resProfile.Lastname = profile.Lastname;
+    resProfile.Displayname = profile.Displayname;
     resProfile.Role = profile.Role;
     resProfile.Tel = profile.Tel;
     resProfile.Email = profile.Email;

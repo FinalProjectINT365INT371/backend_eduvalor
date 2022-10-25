@@ -5,8 +5,7 @@ export interface UserProfile extends Document {
   _id: Object;
   Username: string;
   Password: string;
-  Firstname: string;
-  Lastname: string;
+  Displayname: string;
   Email: string;
   Tel: string;
   Address: string;
@@ -32,13 +31,9 @@ export const UserProfileSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
-  Firstname: {
+  Displayname: {
     type: String,
-    required: [true, 'Must have First name'],
-  },
-  Lastname: {
-    type: String,
-    required: [true, 'Must have Last name'],
+    required: [true, 'Must have Display name'],
   },
   Email: String, // NOT sure
   Tel: String,

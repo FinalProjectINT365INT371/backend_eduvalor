@@ -12,24 +12,27 @@ import {
   
   export class UpdateUserProfile {
 
+    @IsOptional()
     @IsString()
-    Firstname: string;
+    Displayname: string;
   
-    @IsString()
-    Lastname: string;
-  
+    @IsOptional()
     @IsString()
     Email: string;
-  
+
+    @IsOptional()
     @IsString()
     Tel: string;
   
+    @IsOptional()
     @IsString()
     Address: string;
-  
+
+    @IsOptional()
     @IsString()
     BirthDate: string;
-  
+
+    @IsOptional()
     @IsString()
     Role: string;
 

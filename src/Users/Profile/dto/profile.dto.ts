@@ -18,23 +18,28 @@ export class CreateUserProfile {
   Password: string;
 
   @IsString()
-  Firstname: string;
+  Displayname: string;
 
-  @IsString()
-  Lastname: string;
+  // @IsString()
+  // Lastname: string;
 
+  @IsOptional()
   @IsString()
   Email: string;
 
+  @IsOptional()
   @IsString()
   Tel: string;
 
+  @IsOptional()
   @IsString()
   Address: string;
 
+  @IsOptional()
   @IsString()
   BirthDate: string;
 
+  @IsOptional()
   @IsString()
   Role: string;
 
@@ -58,8 +63,7 @@ export class CreateUserProfile {
 export class ResponseUserProfile {
   id:string;
   Username: string;
-  Firstname: string;
-  Lastname: string;
+  Displayname: string;
   Email: string;
   Tel: string;
   Address: string;
