@@ -27,6 +27,14 @@ export class ContentApprovingService {
     private readonly logger: Logger,
   ) {}
 
+  async findContentApproveByContentId(id) {
+    let createApproving = await this.ContentApprovingModel.find({
+      ContentId: id,
+      DeleteFlag: false,
+    }).exec();
+    return createApproving;
+  }
+
   async addContentApproving(
     createApproving: CreateContentApproving,
   ): Promise<ContentApproving> {

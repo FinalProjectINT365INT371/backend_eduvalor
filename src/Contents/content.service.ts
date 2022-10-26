@@ -14,6 +14,7 @@ import { UploadService } from 'src/Upload/upload.service';
 import { Logger } from 'winston';
 import { SearchService } from './search.service';
 import { UpdateContent } from './ContentData/dto/updateContent.dto';
+import { CommentService } from './Comment/comment.service';
 
 @Injectable()
 export class ContentService {
@@ -24,6 +25,7 @@ export class ContentService {
     @Inject('winston')
     private readonly logger: Logger,
     private readonly searchService: SearchService,
+    private readonly commentService: CommentService,
   ) {}
   EOF = 'End of Function';
   async findAllcontentId() {
@@ -263,6 +265,23 @@ export class ContentService {
     }
     content.DeleteFlag = true;
     content.UpdateDate = new Date().toLocaleString();
+
+    if (content.Comment.length > 0) {
+      let comments = await this.commentService.findCommentByContentId(
+        content.id,
+      );
+      comments.forEach((comment) => {
+        comment.DeleteFlag = true;
+        comment.save();
+      });
+      for (let index = 0; index < comments.length; index++) {        
+        await this.ContentModel.updateOne(
+          { _id: id, 'Comment._id': comments[index].id },
+          { $set: { 'Comment.$.DeleteFlag': true } },
+       ).exec();
+      }
+    }
+
     try {
       await content.save();
     } catch (error) {
@@ -274,15 +293,6 @@ export class ContentService {
     //this.logger.debug(this.EOF);
     return await this.ContentModel.find({ _id: id }).exec();
   }
-
-  // async generateNewId() {
-  //   let lastContent = await this.ContentModel.find()
-  //     .sort({ $natural: -1 })
-  //     .limit(1);
-  //   let lastId = parseInt(lastContent[0]._id.toString().split('_')[1]);
-  //   let genId = 'CT_' + (lastId + 1);
-  //   return genId;
-  // }
 
   async generateNewId() {
     let lastId = Math.round(100000 + Math.random() * 900000);

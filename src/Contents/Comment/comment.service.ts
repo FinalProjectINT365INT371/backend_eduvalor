@@ -27,6 +27,14 @@ export class CommentService {
     private readonly logger: Logger,
   ) {}
 
+  async findCommentByContentId(id) {
+    let comment = await this.CommentModel.find({
+      ContentId: id,
+      DeleteFlag: false,
+    }).exec();
+    return comment;
+  }
+
   async addComment(createComment: CommentContent): Promise<CommentData> {
     const createdComment = new this.CommentModel(createComment);
     let contents = await this.ContentModel.findOne({
