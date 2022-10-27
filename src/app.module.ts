@@ -19,6 +19,7 @@ import { AppLoggerMiddleware } from './Loggers/middleware.service';
 import { UsersModule } from './Users/users.module';
 import { AuthModule } from './Auth/auth.module';
 import { GoogleMapsModule } from './GoogleMap/googleMaps.module';
+import { ContentCategoryModule } from './Masters/ContentCategory/contentCategory.module';
 config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -63,6 +64,7 @@ config.update({
     ContentModule,
     UploadModule,
     AuthModule,
+    ContentCategoryModule 
     //GoogleMapsModule,
   ],
 

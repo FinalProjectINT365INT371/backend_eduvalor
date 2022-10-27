@@ -1,31 +1,35 @@
 import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
 
-export interface ContentApproving extends Document {
+export interface CommentData extends Document {
   _id: Object;
   UserId: string;
   ContentId: string;
   Comment: string;
+  Displayname:string;
   CreateBy: string;
   CreateDate: string;
   UpdateDate: string;
   DeleteFlag: boolean;
-  ApproveStatus: string;
 }
 
-export const ContentApprovingSchema = new mongoose.Schema({
+export const CommentSchema = new mongoose.Schema({
   _id: Object,
   UserId: {
     type: String,
-    required: [true, 'Must have User Id'],
+    required: [true, 'Must have User Id']
+  },
+  Displayname: {
+    type: String,
+    required: [true, 'Must have Dispalyname']
   },
   ContentId: {
     type: String,
-    required: [true, 'Must have Content Id'],
+    required: [true, 'Must have Content Id']
   },
   Comment: {
     type: String,
-    required: [true, 'Must have Comment'],
+    required: [true, 'Must have Comment']
   },
   CreateBy: String,
   CreateDate: String,
@@ -34,12 +38,5 @@ export const ContentApprovingSchema = new mongoose.Schema({
     type: Boolean,
     required: [true, 'Must have flag'],
   },
-  ApproveStatus: {
-    type: String,
-    enum: {
-      values: ['PASS'],
-      message: '{VALUE} is not supported'
-    },
-    required: [true, 'Must have Approve Status']
-  },
 });
+

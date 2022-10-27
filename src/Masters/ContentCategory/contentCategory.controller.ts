@@ -10,52 +10,52 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserRole } from './dto/usersRole.dto';
-import { UserRoleService } from './usersRole.service';
+import { CreateContentCategory } from './dto/category.dto';
+import { ContentCategoryService } from './contentCategory.service';
 import { Roles } from 'src/Authorization/roles.decorator';
 import { ROLES } from 'src/Authorization/ROLES';
 import { RolesGuard } from 'src/Authorization/roles.guard';
 import { JwtAuthGuard } from 'src/Auth/guard/jwt-auth.guard';
 
-@Controller('userRole')
-export class UserRoleController {
-  constructor(private readonly userRoleService: UserRoleService) {}
+@Controller('contentCategory')
+export class ContentCategoryController {
+  constructor(
+    private readonly contentCategoryService: ContentCategoryService,
+  ) {}
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER)
   @Get()
   getAll() {
-    return this.userRoleService.findAll();
+    return this.contentCategoryService.findAll();
   }
 
   // @UseGuards(JwtAuthGuard, RolesGuard)
   // @Roles('roles', ROLES.DEVELOPER)
-  @Get('getRolebyId')
+  @Get('getbyId')
   async getById(@Query('id') id: string) {
-    return await this.userRoleService.findById(id);
+    return await this.contentCategoryService.findById(id);
   }
 
   // @UseGuards(JwtAuthGuard, RolesGuard)
   // @Roles('roles', ROLES.DEVELOPER)
-  @Post('addRole')
-  async create(@Body() createUserRole: CreateUserRole) {
-    return await this.userRoleService.create(createUserRole);
+  @Post('add')
+  async create(@Body() createContentCategory: CreateContentCategory) {
+    return await this.contentCategoryService.create(createContentCategory);
   }
 
   // @UseGuards(JwtAuthGuard, RolesGuard)
   // @Roles('roles', ROLES.DEVELOPER)
-  @Put('updateRole')
+  @Put('update')
   async update(
     @Query('id') id: string,
-    @Body() updateUserRole: CreateUserRole,
+    @Body() updateContentCategory: CreateContentCategory,
   ) {
-    return await this.userRoleService.update(id, updateUserRole);
+    return await this.contentCategoryService.update(id, updateContentCategory);
   }
 
   // @UseGuards(JwtAuthGuard, RolesGuard)
   // @Roles('roles', ROLES.DEVELOPER)
-  @Delete('deleteUserRole')
+  @Delete('delete')
   async removeById(@Query('id') id: string) {
-    return this.userRoleService.removeById(id);
+    return this.contentCategoryService.removeById(id);
   }
 }

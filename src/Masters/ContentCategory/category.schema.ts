@@ -2,19 +2,26 @@ import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
 
 export interface ContentCategory extends Document {
-  readonly Id: number;
-  readonly CategoryName: string;
-  readonly CreateBy: string;
-  readonly CreateDate: string;
-  readonly UpdateDate: string;
-  readonly DeleteFlag: boolean;
+  _id: Object;
+  CategoryName: string;
+  CreateBy: string;
+  CreateDate: string;
+  UpdateDate: string;
+  DeleteFlag: boolean;
 }
 
 export const ContentCategorySchema = new mongoose.Schema({
-  Id: Number,
-  CategoryName: String,
+  _id: Object,
+  CategoryName: {
+    type: String,
+    unique: true,
+    required: [true, 'Must have Category Name'],
+  },
   CreateBy: String,
   CreateDate: String,
   UpdateDate: String,
-  DeleteFlag: Boolean,
+  DeleteFlag: {
+    type: Boolean,
+    required: [true, 'Must have flag'],
+  },
 });

@@ -1,32 +1,35 @@
-import { IsNotEmpty, IsNumber, IsNumberString, IsString,IsArray, IsBoolean } from "class-validator";
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsNumberString,
+  IsString,
+  IsArray,
+  IsBoolean,
+} from 'class-validator';
 
 export class CreateContent {
+  @IsString()
+  readonly Header: string;
 
+  @IsArray()
+  readonly TextData: [string];
 
-    @IsString()
-    readonly Header:string;
+  @IsArray()
+  readonly ContentCategory: [string];
 
+  // @IsString()
+  // @IsArray()
+  // readonly ImageUrl:[String];
 
-    @IsArray()
-    readonly TextData:[string];
+  // @IsArray()
+  // readonly ImageFile: [File]
 
+  @IsString()
+  readonly CreateBy: string;
 
-    @IsArray()
-    readonly ContentCategory:[string];
+  // @IsString()
+  // readonly DeleteFlag: string;
 
-    // @IsString()
-    // @IsArray()
-    // readonly ImageUrl:[String];
-    
-    // @IsArray()
-    // readonly ImageFile: [File]
-
-    @IsString()
-    readonly CreateBy: string;
-
-    // @IsString()
-    // readonly DeleteFlag: string;
-
-
+  @IsArray()
+  readonly Coordinate: [object];
 }
-

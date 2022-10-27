@@ -14,6 +14,8 @@ import { UploadService } from 'src/Upload/upload.service';
 import { Logger } from 'winston';
 import { SearchService } from './search.service';
 import { UpdateContent } from './ContentData/dto/updateContent.dto';
+import { CommentService } from './Comment/comment.service';
+
 @Injectable()
 export class ContentService {
   constructor(
@@ -23,6 +25,7 @@ export class ContentService {
     @Inject('winston')
     private readonly logger: Logger,
     private readonly searchService: SearchService,
+    private readonly commentService: CommentService,
   ) {}
   EOF = 'End of Function';
   async findAllcontentId() {
@@ -55,8 +58,15 @@ export class ContentService {
       let textdata = content.TextData[0];
       let imageList = await this.getImageInContent(content.id);
       content.TextData[0] = await this.replceImageUrl(textdata, imageList);
+      for (let index = 0; index < content.Comment.length; index++) {
+        const comment = content.Comment[index];
+        if (comment.DeleteFlag == true) {
+          content.Comment.splice(index, 1);
+        }
+      }
       contentList.push(content);
     }
+
     this.logger.info(contentList);
     //this.logger.debug(this.EOF);
     return contentList;
@@ -68,13 +78,39 @@ export class ContentService {
       _id: id,
       DeleteFlag: false,
     }).exec();
+
+    let contentUpdateView = content;
     if (content != null) {
       let textdata = content.TextData[0];
       let imageList = await this.getImageInContent(id);
+      let commentFilter = [];
       content.TextData[0] = await this.replceImageUrl(textdata, imageList);
+      for (let index = 0; index < content.Comment.length; index++) {
+        let comment = content.Comment[index];
+        if (comment.DeleteFlag == false) {
+          commentFilter.push(comment);
+        }
+      }
+
+      while (content.Comment.length > 0) {
+        content.Comment.pop();
+      }
+
+      for (const comment of commentFilter) {
+        content.Comment.push(comment);
+      }
+      //content.Comment.concat(commentFilter);
+      console.log(content.Comment);
+
       this.logger.info(content);
       //this.logger.debug(this.EOF);
+      let view = content.View + 1;
+      let contentUpdateView = await this.ContentModel.findOneAndUpdate(
+        { _id: id, DeleteFlag: false },
+        { $set: { View: view } },
+      ).exec();
       return content;
+      //View update
     } else {
       let res = "This content doesn't exist";
       this.logger.error(res);
@@ -106,6 +142,8 @@ export class ContentService {
     createdContent.CreateDate = new Date().toLocaleString();
     createdContent.UpdateDate = new Date().toLocaleString();
     createdContent.DeleteFlag = false;
+    createdContent.Share = 0;
+    createdContent.View = 0;
     if (typeof file !== 'undefined') {
       if (file.length > 0) {
         file.forEach((image, index) => {
@@ -227,6 +265,23 @@ export class ContentService {
     }
     content.DeleteFlag = true;
     content.UpdateDate = new Date().toLocaleString();
+
+    if (content.Comment.length > 0) {
+      let comments = await this.commentService.findCommentByContentId(
+        content.id,
+      );
+      comments.forEach((comment) => {
+        comment.DeleteFlag = true;
+        comment.save();
+      });
+      for (let index = 0; index < comments.length; index++) {        
+        await this.ContentModel.updateOne(
+          { _id: id, 'Comment._id': comments[index].id },
+          { $set: { 'Comment.$.DeleteFlag': true } },
+       ).exec();
+      }
+    }
+
     try {
       await content.save();
     } catch (error) {
@@ -240,11 +295,23 @@ export class ContentService {
   }
 
   async generateNewId() {
-    let lastContent = await this.ContentModel.find()
-      .sort({ $natural: -1 })
-      .limit(1);
-    let lastId = parseInt(lastContent[0]._id.toString().split('_')[1]);
+    let lastId = Math.round(100000 + Math.random() * 900000);
     let genId = 'CT_' + (lastId + 1);
+    let content = await this.ContentModel.findOne({
+      _id: genId,
+      DeleteFlag: false,
+    }).exec();
+
+    if (content != null) {
+      do {
+        lastId = Math.round(100000 + Math.random() * 900000);
+        genId = 'CT_' + (lastId + 1);
+        content = await this.ContentModel.findOne({
+          _id: genId,
+          DeleteFlag: false,
+        }).exec();
+      } while (content == null);
+    }
     return genId;
   }
 
@@ -284,7 +351,9 @@ export class ContentService {
     imageUrlList.forEach((imageUrl) => {
       let imageName = imageUrl.split(' : ')[0];
       let imageurl = imageUrl.split(' : ')[1];
+
       convertText = convertText.replace(imageName, imageurl);
+      //console.log(convertText);
     });
     return convertText;
   }

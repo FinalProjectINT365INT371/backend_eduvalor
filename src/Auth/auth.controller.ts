@@ -43,7 +43,7 @@ export class AuthController {
   @Get('me')
   async GetUser(@Request() req): Promise<any> {
     const user = await this.usersProfileService.findById(req.user.user_id);
-    return user;
+    return this.usersProfileService.setResUserProfiles(user);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -91,4 +91,10 @@ export class AuthController {
       userApp: user,
     };
   }
+
+
+  // @Get('sendEmail')
+  // public sendEmail(@Request() req): any {
+  //   return this.authService.sendEmailToUser(req.username);
+  // }
 }

@@ -13,9 +13,6 @@ export class UserRoleService {
   constructor(
     @InjectModel('userRoles') private readonly UserRoleModel: Model<UserRole>,
   ) {}
-  getHello(): string {
-    return 'Hello World!';
-  }
 
   async create(createUserRole: CreateUserRole): Promise<UserRole> {
     let userRole =  await this.UserRoleModel.findOne({ _id: createUserRole.RoleId }).exec();

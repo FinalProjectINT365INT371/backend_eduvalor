@@ -12,9 +12,16 @@ export interface UserRole extends Document {
 
 export const UserRoleSchema = new mongoose.Schema({
   _id: Object,
-  RoleName: String,
+  RoleName: {
+    type: String,
+    unique: true,
+    required: [true, 'Must have Role Name'],
+  },
   CreateBy: String,
   CreateDate: String,
   UpdateDate: String,
-  DeleteFlag: Boolean,
+  DeleteFlag: {
+    type: Boolean,
+    required: [true, 'Must have flag'],
+  },
 });
