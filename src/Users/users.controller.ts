@@ -37,7 +37,7 @@ export class UsersController {
     return this.UsersProfileService.setResUserProfiles(user);
   }
 
-  //@UsePipes(ValidationPipe)
+  @UsePipes(ValidationPipe)
   @Post('adduser')
   @UseInterceptors(FilesInterceptor('ImageFile'))
   async create(
