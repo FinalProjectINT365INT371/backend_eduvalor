@@ -5,6 +5,7 @@ import {
     IsString,
     IsArray,
     IsBoolean,
+    IsOptional,
   } from 'class-validator';
   
   export class UpdateContentApproving {
@@ -16,10 +17,12 @@ import {
 
     @IsString()
     readonly UserId: string;
-
+    
+    @IsOptional()
     @IsString()
     readonly Comment: string;
 
+    @IsOptional()
     @IsString()
     readonly ApproveStatus: string;
 
