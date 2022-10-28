@@ -50,7 +50,7 @@ export class ContentService {
     if (contents.length == 0 || contents == null) {
       let res = "This content doesn't exist";
       this.logger.error(res);
-      //this.logger.debug(this.EOF)
+      
       throw new NotFoundException(res);
     }
     let contentList = [];
