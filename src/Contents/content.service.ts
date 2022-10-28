@@ -84,6 +84,7 @@ export class ContentService {
       let textdata = content.TextData[0];
       let imageList = await this.getImageInContent(id);
       let commentFilter = [];
+      let approveFilter = [];
       content.TextData[0] = await this.replceImageUrl(textdata, imageList);
       for (let index = 0; index < content.Comment.length; index++) {
         let comment = content.Comment[index];
@@ -98,6 +99,21 @@ export class ContentService {
 
       for (const comment of commentFilter) {
         content.Comment.push(comment);
+      }
+
+      for (let index = 0; index < content.ApproveData.length; index++) {
+        let approve = content.ApproveData[index];
+        if (approve.DeleteFlag == false) {
+          approveFilter.push(approve);
+        }
+      }
+
+      while (content.ApproveData.length > 0) {
+        content.ApproveData.pop();
+      }
+
+      for (const approve of approveFilter) {
+        content.ApproveData.push(approve);
       }
       //content.Comment.concat(commentFilter);
       console.log(content.Comment);
