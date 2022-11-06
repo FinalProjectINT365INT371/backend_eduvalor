@@ -110,10 +110,10 @@ export class UsersProfileService {
     @UploadedFiles() file: Array<Express.Multer.File>,
   ): Promise<ResponseUserProfile> {
     //Check Statement of this line
-    if (
-      (CreateUserProfile.PSID == '' || CreateUserProfile.PSID == null) &&
-      (CreateUserProfile.GoogleAccess == false || CreateUserProfile.GoogleAccess == null)
-    ) {
+    // if (
+    //   (CreateUserProfile.PSID == '' || CreateUserProfile.PSID == null) &&
+    //   (CreateUserProfile.GoogleAccess == false || CreateUserProfile.GoogleAccess == null)
+    // ) {
       let userProfile = await this.UserProfileModel.findOne({
         Username: CreateUserProfile.Username,
         DeleteFlag: false,
@@ -121,7 +121,7 @@ export class UsersProfileService {
       if (userProfile != null) {
         throw new NotAcceptableException('This username is already exist');
       }
-    }
+    //}
 
     const bcrypt = require('bcrypt');
     const createdUser = new this.UserProfileModel(CreateUserProfile);
