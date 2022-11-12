@@ -21,7 +21,7 @@ export class AuthService {
     const user = await this.userProfileService.findByUsername(username);
     const dcryptPassword = encryptpwd.decrypt(password, process.env.DCRYPT_SECRET);
     //const passwordChange = await bcrypt.hash(password, 10);
-    this.logger.debug('Bcrypt password');
+    this.logger.debug('Dcrypt password');
     console.log(dcryptPassword);
     console.log(user.Password);
     console.log(await bcrypt.compare(dcryptPassword, user.Password));
