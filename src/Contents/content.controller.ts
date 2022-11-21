@@ -128,9 +128,9 @@ export class ContentController {
     );
     if (contentCreated != null) {
       //console.log(req.user);
-      let user = await this.usersProfileService.findById(req.user.user_id);
-      user.ContentCreated.push(contentCreated.id);
-      user.save();
+      // let user = await this.usersProfileService.findById(req.user.user_id);
+      // user.ContentCreated.push(contentCreated.id);
+      // user.save();
       return `Save new content successful : ${contentCreated.id}`;
     }
     return `Have some error`;
