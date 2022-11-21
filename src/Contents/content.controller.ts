@@ -127,7 +127,7 @@ export class ContentController {
       files.ImageCover,
     );
     if (contentCreated != null) {
-      //console.log(req.user);
+      console.log("Test");
       // let user = await this.usersProfileService.findById(req.user.user_id);
       // user.ContentCreated.push(contentCreated.id);
       // user.save();
