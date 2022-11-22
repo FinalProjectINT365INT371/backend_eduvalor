@@ -37,8 +37,8 @@ export class CommentController {
     private readonly commentService: CommentService,
   ) {}
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Post('addcomment')
   async create(@Body() createComment: CommentContent) {
@@ -49,8 +49,8 @@ export class CommentController {
     return `Have some error`;
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Put('updatecomment')
   async update(@Body() updateComment: UpdateComment) {
@@ -61,8 +61,8 @@ export class CommentController {
     return `Have some error`;
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Delete('deletecomment')
   async delete(@Body() deleteComment: DeleteComment) {

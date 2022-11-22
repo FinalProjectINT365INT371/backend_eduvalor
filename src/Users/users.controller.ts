@@ -29,8 +29,8 @@ import { JwtAuthGuard } from 'src/Auth/guard/jwt-auth.guard';
 export class UsersController {
   constructor(private readonly UsersProfileService: UsersProfileService) {}
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @Get('getUserByID')
   async getById(@Query('id') id: string) {
     let user = await this.UsersProfileService.findById(id);
@@ -55,8 +55,8 @@ export class UsersController {
     }
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Put('edituser')
   @UseInterceptors(FilesInterceptor('ImageFile'))
@@ -79,8 +79,8 @@ export class UsersController {
     }
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @Delete('deleteuser')
   async delete(@Query('id') id: string) {
     let userRemoved = await this.UsersProfileService.removeProfileById(id);
