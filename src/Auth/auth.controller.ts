@@ -35,6 +35,7 @@ export class AuthController {
   @UseGuards(LoginAuthGuard)
   @Post('login')
   public login(@Request() req): any {
+    this.logger.info(`Login success: UserId - ${req.user._doc._id}, Role - ${req.user._doc.Role}` );
     console.log(req.user._doc);
     return this.authService.login(req.user._doc);
   }

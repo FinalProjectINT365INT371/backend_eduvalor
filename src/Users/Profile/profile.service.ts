@@ -160,7 +160,7 @@ export class UsersProfileService {
       //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-    this.logger.info(createdUser);
+    this.logger.debug(createdUser);
     //this.logger.debug(this.EOF);
     return this.setResUserProfiles(createdUser);
   }
@@ -210,7 +210,7 @@ export class UsersProfileService {
       _id: id,
       DeleteFlag: false,
     }).exec();
-    this.logger.info(updatedUser);
+    this.logger.debug(updatedUser);
     //this.logger.debug(this.EOF);
     return updatedUser;
   }

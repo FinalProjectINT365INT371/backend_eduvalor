@@ -47,8 +47,14 @@ config.update({
           ),
         }),
         new winston.transports.DailyRotateFile({
-          level: 'silly',
-          dirname: './log/',
+          level: 'debug',
+          dirname: './log/adminlog/',
+          filename: 'App-%DATE%.log',
+          datePattern: 'YYYY-MM-DD',
+        }),        
+        new winston.transports.DailyRotateFile({
+          level: 'info',
+          dirname: './log/accesslog/',
           filename: 'App-%DATE%.log',
           datePattern: 'YYYY-MM-DD',
         }),

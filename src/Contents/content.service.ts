@@ -67,7 +67,7 @@ export class ContentService {
       contentList.push(content);
     }
 
-    this.logger.info(contentList);
+    this.logger.debug(contentList);
     //this.logger.debug(this.EOF);
     return contentList;
   }
@@ -118,7 +118,7 @@ export class ContentService {
       //content.Comment.concat(commentFilter);
       console.log(content.Comment);
 
-      this.logger.info(content);
+      this.logger.debug(content);
       //this.logger.debug(this.EOF);
       let view = content.View + 1;
       let contentUpdateView = await this.ContentModel.findOneAndUpdate(
@@ -194,7 +194,7 @@ export class ContentService {
       //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-    this.logger.info(createdContent);
+    this.logger.debug(createdContent);
     //this.logger.debug(this.EOF);
     return createdContent;
   }
@@ -263,7 +263,7 @@ export class ContentService {
     }
     //this.logger.debug(this.EOF);
     let updatedContent = await this.ContentModel.find({ _id: id }).exec();
-    this.logger.info(updatedContent);
+    this.logger.debug(updatedContent);
     return updatedContent;
   }
 

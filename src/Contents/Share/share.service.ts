@@ -60,7 +60,7 @@ export class ShareService {
       //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-    this.logger.info(shareLog);
+    this.logger.debug(shareLog);
     return shareLog;
   }
 

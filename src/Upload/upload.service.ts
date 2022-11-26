@@ -55,7 +55,7 @@ export class UploadService {
     const param = { Bucket: Buckets, Key: imageName };
     this.logger.debug(param);
     const url = s3.getSignedUrl('getObject', param);
-    this.logger.info(`${'imageUrl : ' + url}`);
+    this.logger.debug(`${'imageUrl : ' + url}`);
     return `${'imageUrl : ' + url}`;
   }
 
@@ -67,7 +67,7 @@ export class UploadService {
       .listObjects(param, function (err, data) {
         if (err) console.log(err, err.stack);
         else {
-          this.logger.info(data);
+          this.logger.debug(data);
           list = data.Contents;
         }
       })
