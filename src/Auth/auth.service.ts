@@ -14,16 +14,19 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, password: string): Promise<any> {
+    const bcrypt = require('bcrypt');
+    const encryptpwd = require('encrypt-with-password');
+
     this.logger.debug('Validate-authservice');
     const user = await this.userProfileService.findByUsername(username);
-    const bcrypt = require('bcrypt');
-    const passwordChange = await bcrypt.hash(password, 10);
-    this.logger.debug('Bcrypt password');
-    console.log(passwordChange);
+    const dcryptPassword = encryptpwd.decrypt(password, process.env.DCRYPT_SECRET);
+    //const passwordChange = await bcrypt.hash(password, 10);
+    this.logger.debug('Dcrypt password');
+    console.log(dcryptPassword);
     console.log(user.Password);
-    console.log(await bcrypt.compare(password, user.Password));
+    console.log(await bcrypt.compare(dcryptPassword, user.Password));
 
-    if (user && (await bcrypt.compare(password, user.Password))) {
+    if (user && (await bcrypt.compare(dcryptPassword, user.Password))) {
       const { Password, Username, ...rest } = user;
       return rest;
     }

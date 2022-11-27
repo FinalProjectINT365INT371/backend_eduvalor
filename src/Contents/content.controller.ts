@@ -102,8 +102,8 @@ export class ContentController {
     return await this.contentService.getImageInContent(id);
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Post('addcontent')
   @UseInterceptors(
@@ -127,17 +127,16 @@ export class ContentController {
       files.ImageCover,
     );
     if (contentCreated != null) {
-      //console.log(req.user);
-      // let user = await this.usersProfileService.findById(req.user.user_id);
-      // user.ContentCreated.push(contentCreated.id);
-      // user.save();
+      let user = await this.usersProfileService.findById(req.user.user_id);
+      user.ContentCreated.push(contentCreated.id);
+      user.save();
       return `Save new content successful : ${contentCreated.id}`;
     }
     return `Have some error`;
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Put('editcontent')
   @UseInterceptors(
@@ -167,8 +166,8 @@ export class ContentController {
     return `Have some error`;
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @Delete('deletecontent')
   async delete(@Query('id') id: string) {
     let contentremoved = await this.contentService.removeById(id);

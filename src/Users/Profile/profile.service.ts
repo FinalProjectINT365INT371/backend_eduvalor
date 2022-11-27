@@ -109,13 +109,19 @@ export class UsersProfileService {
     CreateUserProfile: CreateUserProfile,
     @UploadedFiles() file: Array<Express.Multer.File>,
   ): Promise<ResponseUserProfile> {
-    let userProfile = await this.UserProfileModel.findOne({
-      Username: CreateUserProfile.Username,
-      DeleteFlag: false,
-    }).exec();
-    if (userProfile != null) {
-      throw new NotAcceptableException('This username is already exist');
-    }
+    //Check Statement of this line
+    // if (
+    //   (CreateUserProfile.PSID == '' || CreateUserProfile.PSID == null) &&
+    //   (CreateUserProfile.GoogleAccess == false || CreateUserProfile.GoogleAccess == null)
+    // ) {
+      let userProfile = await this.UserProfileModel.findOne({
+        Username: CreateUserProfile.Username,
+        DeleteFlag: false,
+      }).exec();
+      if (userProfile != null) {
+        throw new NotAcceptableException('This username is already exist');
+      }
+    //}
 
     const bcrypt = require('bcrypt');
     const createdUser = new this.UserProfileModel(CreateUserProfile);
@@ -154,7 +160,7 @@ export class UsersProfileService {
       //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-    this.logger.info(createdUser);
+    this.logger.debug(createdUser);
     //this.logger.debug(this.EOF);
     return this.setResUserProfiles(createdUser);
   }
@@ -204,7 +210,7 @@ export class UsersProfileService {
       _id: id,
       DeleteFlag: false,
     }).exec();
-    this.logger.info(updatedUser);
+    this.logger.debug(updatedUser);
     //this.logger.debug(this.EOF);
     return updatedUser;
   }
@@ -265,6 +271,7 @@ export class UsersProfileService {
   }
 
   async setResUserProfiles(profile: UserProfile) {
+    let signedUrl = await this.uploadService.getSignedUrlS3(profile.ImageUrl,'eduvalor-users');
     let resProfile = new ResponseUserProfile();
     resProfile.id = profile.id;
     resProfile.Username = profile.Username;
@@ -274,7 +281,7 @@ export class UsersProfileService {
     resProfile.Email = profile.Email;
     resProfile.Address = profile.Address;
     resProfile.BirthDate = profile.BirthDate;
-    resProfile.ImageUrl = profile.ImageUrl;
+    resProfile.ImageUrl = signedUrl
     resProfile.ContentCreated = profile.ContentCreated;
     return resProfile;
   }

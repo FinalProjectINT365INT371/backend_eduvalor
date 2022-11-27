@@ -74,7 +74,7 @@ export class CommentService {
       //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-    this.logger.info(createdComment);
+    this.logger.debug(createdComment);
     return createdComment;
   }
 
@@ -124,7 +124,7 @@ export class CommentService {
       //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-    this.logger.info(commentToUpdate);
+    this.logger.debug(commentToUpdate);
     return commentToUpdate;
   }
   /*Delete*/
@@ -167,7 +167,7 @@ export class CommentService {
       //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-    this.logger.info(commentToDelete);
+    this.logger.debug(commentToDelete);
     return commentToDelete;
   }
   // async generateNewId(content: ContentData) {

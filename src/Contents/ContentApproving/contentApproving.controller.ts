@@ -40,8 +40,8 @@ export class ApproveContentController {
     private readonly contentApprovingService: ContentApprovingService,
   ) {}
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Post('addapprove')
   async create(@Body() createApproveContent: CreateContentApproving) {
@@ -55,8 +55,8 @@ export class ApproveContentController {
     return `Have some error`;
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Put('updateapprove')
   async update(@Body() updateApproveContent: UpdateContentApproving) {
@@ -70,8 +70,8 @@ export class ApproveContentController {
     return `Have some error`;
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER, ROLES.ADMIN, ROLES.CONTENT_CREATOR)
   @UsePipes(ValidationPipe)
   @Delete('deleteapprove')
   async delete(@Body() deleteApproveContent: DeleteContentApproving) {

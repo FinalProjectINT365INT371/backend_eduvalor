@@ -69,7 +69,7 @@ export class ContentApprovingService {
       //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-    this.logger.info(createdApproving);
+    this.logger.debug(createdApproving);
     return createdApproving;
   }
 
@@ -128,7 +128,7 @@ export class ContentApprovingService {
       //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-    this.logger.info(approvedContentToUpdate);
+    this.logger.debug(approvedContentToUpdate);
     return approvedContentToUpdate;
   }
   /*Delete*/
@@ -176,7 +176,7 @@ export class ContentApprovingService {
       //this.logger.debug(this.EOF);
       throw new HttpException(res, 503);
     }
-    this.logger.info(contentApprovedToDelete);
+    this.logger.debug(contentApprovedToDelete);
     return contentApprovedToDelete;
   }
   // async generateNewId(content: ContentData) {
