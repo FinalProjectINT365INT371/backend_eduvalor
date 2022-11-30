@@ -21,29 +21,29 @@ import { JwtAuthGuard } from 'src/Auth/guard/jwt-auth.guard';
 export class UserRoleController {
   constructor(private readonly userRoleService: UserRoleService) {}
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER)
   @Get()
   getAll() {
     return this.userRoleService.findAll();
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER)
   @Get('getRolebyId')
   async getById(@Query('id') id: string) {
     return await this.userRoleService.findById(id);
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER)
   @Post('addRole')
   async create(@Body() createUserRole: CreateUserRole) {
     return await this.userRoleService.create(createUserRole);
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER)
   @Put('updateRole')
   async update(
     @Query('id') id: string,
@@ -52,8 +52,8 @@ export class UserRoleController {
     return await this.userRoleService.update(id, updateUserRole);
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER)
   @Delete('deleteUserRole')
   async removeById(@Query('id') id: string) {
     return this.userRoleService.removeById(id);

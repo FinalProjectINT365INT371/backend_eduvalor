@@ -28,22 +28,22 @@ export class ContentCategoryController {
     return this.contentCategoryService.findAll();
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER)
   @Get('getbyId')
   async getById(@Query('id') id: string) {
     return await this.contentCategoryService.findById(id);
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER)
   @Post('add')
   async create(@Body() createContentCategory: CreateContentCategory) {
     return await this.contentCategoryService.create(createContentCategory);
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER)
   @Put('update')
   async update(
     @Query('id') id: string,
@@ -52,8 +52,8 @@ export class ContentCategoryController {
     return await this.contentCategoryService.update(id, updateContentCategory);
   }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('roles', ROLES.DEVELOPER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.DEVELOPER)
   @Delete('delete')
   async removeById(@Query('id') id: string) {
     return this.contentCategoryService.removeById(id);

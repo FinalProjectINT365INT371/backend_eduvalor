@@ -47,13 +47,6 @@ export class AuthController {
     return this.usersProfileService.setResUserProfiles(user);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('roles', ROLES.DEVELOPER)
-  @Get('role')
-  async GetRole(@Request() req): Promise<any> {
-    return 'Your Developer !!';
-  }
-
   @Get('/facebook')
   @UseGuards(FacebookAuthGuard)
   async facebookLogin(): Promise<any> {
